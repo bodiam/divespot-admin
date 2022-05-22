@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-import DocumentationNavigation from '../main/documentation/DocumentationNavigation';
 
 import ar from './navigation-i18n/ar';
 import en from './navigation-i18n/en';
@@ -1009,7 +1008,6 @@ const navigationConfig = [
     id: 'divider-1',
     type: 'divider',
   },
-  DocumentationNavigation,
   {
     id: 'auth',
     title: 'Auth',
