@@ -9,12 +9,14 @@ import SignOutConfig from '../main/sign-out/SignOutConfig';
 import dashboardsConfigs from '../main/dashboards/dashboardsConfigs';
 import appsConfigs from '../main/apps/appsConfigs';
 import pagesConfigs from '../main/pages/pagesConfigs';
+import divespotsConfig from '../main/divespots/DivespotsConfig';
 import authRoleExamplesConfigs from '../main/auth/authRoleExamplesConfigs';
 
 const routeConfigs = [
   ...appsConfigs,
   ...dashboardsConfigs,
   ...pagesConfigs,
+  ...divespotsConfig,
   ...authRoleExamplesConfigs,
   ...userInterfaceConfigs,
   SignOutConfig,
@@ -26,7 +28,7 @@ const routes = [
   ...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),
   {
     path: '/',
-    element: <Navigate to="dashboards/analytics" />,
+    element: <Navigate to="/divespots" />,
     auth: settingsConfig.defaultAuth,
   },
   {
