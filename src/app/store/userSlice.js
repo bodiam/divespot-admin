@@ -11,7 +11,7 @@ export const setUser = createAsyncThunk('user/setUser', async (user, { dispatch,
   /*
     You can redirect the logged-in user to a specific route depending on his role
     */
-  if (user.loginRedirectUrl) {
+  if (user?.loginRedirectUrl) {
     settingsConfig.loginRedirectUrl = user.loginRedirectUrl; // for example 'apps/academy'
   }
 
@@ -108,6 +108,6 @@ export const { userLoggedOut } = userSlice.actions;
 
 export const selectUser = ({ user }) => user;
 
-export const selectUserShortcuts = ({ user }) => user.data.shortcuts;
+export const selectUserShortcuts = ({ user }) => user?.data?.shortcuts;
 
 export default userSlice.reducer;

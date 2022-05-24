@@ -9,14 +9,14 @@ import SignOutConfig from '../main/sign-out/SignOutConfig';
 import dashboardsConfigs from '../main/dashboards/dashboardsConfigs';
 import appsConfigs from '../main/apps/appsConfigs';
 import pagesConfigs from '../main/pages/pagesConfigs';
-import divespotsConfig from '../main/divespots/DivespotsConfig';
+import DivespotsConfig from '../main/divespots/DivespotsConfig';
 import authRoleExamplesConfigs from '../main/auth/authRoleExamplesConfigs';
 
 const routeConfigs = [
   ...appsConfigs,
   ...dashboardsConfigs,
   ...pagesConfigs,
-  ...divespotsConfig,
+  DivespotsConfig,
   ...authRoleExamplesConfigs,
   ...userInterfaceConfigs,
   SignOutConfig,

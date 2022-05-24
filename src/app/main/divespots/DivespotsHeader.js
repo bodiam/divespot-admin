@@ -6,11 +6,11 @@ import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { selectProductsSearchText, setProductsSearchText } from '../store/productsSlice';
+import { selectDivespotsSearchText, setDivespotsSearchText } from './store/divespotsSlice';
 
-function ProductsHeader(props) {
+function DivespotsHeader(props) {
   const dispatch = useDispatch();
-  const searchText = useSelector(selectProductsSearchText);
+  const searchText = useSelector(selectDivespotsSearchText);
 
   return (
     <div className="flex flex-col sm:flex-row space-y-16 sm:space-y-0 flex-1 w-full items-center justify-between py-32 px-24 md:px-32">
@@ -21,7 +21,7 @@ function ProductsHeader(props) {
         delay={300}
         className="text-24 md:text-32 font-extrabold tracking-tight"
       >
-        Products
+        Divespots
       </Typography>
 
       <div className="flex flex-col w-full sm:w-auto sm:flex-row space-y-16 sm:space-y-0 flex-1 items-center justify-end space-x-8">
@@ -34,7 +34,7 @@ function ProductsHeader(props) {
           <FuseSvgIcon color="disabled">heroicons-solid:search</FuseSvgIcon>
 
           <Input
-            placeholder="Search products"
+            placeholder="Search divespots"
             className="flex flex-1"
             disableUnderline
             fullWidth
@@ -42,7 +42,7 @@ function ProductsHeader(props) {
             inputProps={{
               'aria-label': 'Search',
             }}
-            onChange={(ev) => dispatch(setProductsSearchText(ev))}
+            onChange={(ev) => dispatch(setDivespotsSearchText(ev))}
           />
         </Paper>
         <motion.div
@@ -52,7 +52,7 @@ function ProductsHeader(props) {
           <Button
             className=""
             component={Link}
-            to="/apps/e-commerce/products/new"
+            to="/apps/e-commerce/divespots/new"
             variant="contained"
             color="secondary"
             startIcon={<FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>}
@@ -65,4 +65,4 @@ function ProductsHeader(props) {
   );
 }
 
-export default ProductsHeader;
+export default DivespotsHeader;

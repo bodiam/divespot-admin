@@ -15,7 +15,7 @@ const DivespotsConfig = {
       element: <Divespots />,
     },
     {
-      path: '/products/:divespotId/*',
+      path: '/divespots/:divespotId',
       element: <Divespot />,
     },
 

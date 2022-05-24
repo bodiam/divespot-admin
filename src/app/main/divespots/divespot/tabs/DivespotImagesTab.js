@@ -7,7 +7,7 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import Box from '@mui/material/Box';
 
 const Root = styled('div')(({ theme }) => ({
-  '& .productImageFeaturedStar': {
+  '& .divespotImageFeaturedStar': {
     position: 'absolute',
     top: 0,
     right: 0,
@@ -15,35 +15,35 @@ const Root = styled('div')(({ theme }) => ({
     opacity: 0,
   },
 
-  '& .productImageUpload': {
+  '& .divespotImageUpload': {
     transitionProperty: 'box-shadow',
     transitionDuration: theme.transitions.duration.short,
     transitionTimingFunction: theme.transitions.easing.easeInOut,
   },
 
-  '& .productImageItem': {
+  '& .divespotImageItem': {
     transitionProperty: 'box-shadow',
     transitionDuration: theme.transitions.duration.short,
     transitionTimingFunction: theme.transitions.easing.easeInOut,
     '&:hover': {
-      '& .productImageFeaturedStar': {
+      '& .divespotImageFeaturedStar': {
         opacity: 0.8,
       },
     },
     '&.featured': {
       pointerEvents: 'none',
       boxShadow: theme.shadows[3],
-      '& .productImageFeaturedStar': {
+      '& .divespotImageFeaturedStar': {
         opacity: 1,
       },
-      '&:hover .productImageFeaturedStar': {
+      '&:hover .divespotImageFeaturedStar': {
         opacity: 1,
       },
     },
   },
 }));
 
-function ProductImagesTab(props) {
+function DivespotImagesTab(props) {
   const methods = useFormContext();
   const { control, watch } = methods;
 
@@ -65,7 +65,7 @@ function ProductImagesTab(props) {
               }}
               component="label"
               htmlFor="button-file"
-              className="productImageUpload flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer shadow hover:shadow-lg"
+              className="divespotImageUpload flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer shadow hover:shadow-lg"
             >
               <input
                 accept="image/*"
@@ -111,20 +111,20 @@ function ProductImagesTab(props) {
           control={control}
           defaultValue=""
           render={({ field: { onChange, value } }) =>
-            images.map((media) => (
+            images?.map((media) => (
               <div
                 onClick={() => onChange(media.id)}
                 onKeyDown={() => onChange(media.id)}
                 role="button"
                 tabIndex={0}
                 className={clsx(
-                  'productImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg',
+                  'divespotImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg',
                   media.id === value && 'featured'
                 )}
                 key={media.id}
               >
-                <FuseSvgIcon className="productImageFeaturedStar">heroicons-solid:star</FuseSvgIcon>
-                <img className="max-w-none w-auto h-full" src={media.url} alt="product" />
+                <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:star</FuseSvgIcon>
+                <img className="max-w-none w-auto h-full" src={media.url} alt="divespot" />
               </div>
             ))
           }
@@ -134,4 +134,4 @@ function ProductImagesTab(props) {
   );
 }
 
-export default ProductImagesTab;
+export default DivespotImagesTab;

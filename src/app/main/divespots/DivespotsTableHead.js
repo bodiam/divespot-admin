@@ -15,16 +15,9 @@ import { Box } from '@mui/system';
 import TableHead from '@mui/material/TableHead';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { lighten } from '@mui/material/styles';
-import { removeProducts } from '../store/productsSlice';
+import { removeDivespots } from './store/divespotsSlice';
 
 const rows = [
-  {
-    id: 'image',
-    align: 'left',
-    disablePadding: true,
-    label: '',
-    sort: false,
-  },
   {
     id: 'name',
     align: 'left',
@@ -33,40 +26,40 @@ const rows = [
     sort: true,
   },
   {
-    id: 'categories',
-    align: 'left',
+    id: 'location',
+    align: 'right',
     disablePadding: false,
-    label: 'Category',
+    label: 'Location',
     sort: true,
   },
   {
-    id: 'priceTaxIncl',
+    id: 'entranceType',
     align: 'right',
     disablePadding: false,
-    label: 'Price',
+    label: 'Entrance Type',
     sort: true,
   },
   {
-    id: 'quantity',
+    id: 'createdBy',
     align: 'right',
     disablePadding: false,
-    label: 'Quantity',
+    label: 'Created By',
     sort: true,
   },
   {
-    id: 'active',
+    id: 'createdAt',
     align: 'right',
     disablePadding: false,
-    label: 'Active',
+    label: 'Created At',
     sort: true,
   },
 ];
 
-function ProductsTableHead(props) {
-  const { selectedProductIds } = props;
-  const numSelected = selectedProductIds.length;
+function DivespotsTableHead(props) {
+  const { selectedDivespotIds } = props;
+  const numSelected = selectedDivespotIds.length;
 
-  const [selectedProductsMenu, setSelectedProductsMenu] = useState(null);
+  const [selectedDivespotsMenu, setSelectedDivespotsMenu] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -74,12 +67,12 @@ function ProductsTableHead(props) {
     props.onRequestSort(event, property);
   };
 
-  function openSelectedProductsMenu(event) {
-    setSelectedProductsMenu(event.currentTarget);
+  function openSelectedDivespotsMenu(event) {
+    setSelectedDivespotsMenu(event.currentTarget);
   }
 
-  function closeSelectedProductsMenu() {
-    setSelectedProductsMenu(null);
+  function closeSelectedDivespotsMenu() {
+    setSelectedDivespotsMenu(null);
   }
 
   return (
@@ -108,25 +101,25 @@ function ProductsTableHead(props) {
               }}
             >
               <IconButton
-                aria-owns={selectedProductsMenu ? 'selectedProductsMenu' : null}
+                aria-owns={selectedDivespotsMenu ? 'selectedDivespotsMenu' : null}
                 aria-haspopup="true"
-                onClick={openSelectedProductsMenu}
+                onClick={openSelectedDivespotsMenu}
                 size="large"
               >
                 <FuseSvgIcon>heroicons-outline:dots-horizontal</FuseSvgIcon>
               </IconButton>
               <Menu
-                id="selectedProductsMenu"
-                anchorEl={selectedProductsMenu}
-                open={Boolean(selectedProductsMenu)}
-                onClose={closeSelectedProductsMenu}
+                id="selectedDivespotsMenu"
+                anchorEl={selectedDivespotsMenu}
+                open={Boolean(selectedDivespotsMenu)}
+                onClose={closeSelectedDivespotsMenu}
               >
                 <MenuList>
                   <MenuItem
                     onClick={() => {
-                      dispatch(removeProducts(selectedProductIds));
+                      dispatch(removeDivespots(selectedDivespotIds));
                       props.onMenuItemClick();
-                      closeSelectedProductsMenu();
+                      closeSelectedDivespotsMenu();
                     }}
                   >
                     <ListItemIcon className="min-w-40">
@@ -178,4 +171,4 @@ function ProductsTableHead(props) {
   );
 }
 
-export default ProductsTableHead;
+export default DivespotsTableHead;

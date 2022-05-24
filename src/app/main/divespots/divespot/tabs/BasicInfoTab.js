@@ -47,44 +47,32 @@ function BasicInfoTab(props) {
       />
 
       <Controller
-        name="categories"
+        name="location"
         control={control}
-        defaultValue={[]}
-        render={({ field: { onChange, value } }) => (
-          <Autocomplete
+        render={({ field }) => (
+          <TextField
+            {...field}
             className="mt-8 mb-16"
-            multiple
-            freeSolo
-            options={[]}
-            value={value}
-            onChange={(event, newValue) => {
-              onChange(newValue);
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="Select multiple categories"
-                label="Categories"
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            )}
+            error={!!errors.location}
+            helperText={errors?.location?.message}
+            label="Location"
+            autoFocus
+            id="location"
+            variant="outlined"
+            fullWidth
           />
         )}
       />
 
       <Controller
-        name="tags"
+        name="entranceType"
         control={control}
         defaultValue={[]}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
-            multiple
             freeSolo
-            options={[]}
+            options={["SHORE_DIVE", "BOAT_DIVE"]}
             value={value}
             onChange={(event, newValue) => {
               onChange(newValue);
@@ -92,8 +80,8 @@ function BasicInfoTab(props) {
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Select multiple tags"
-                label="Tags"
+                placeholder="Select entrance type"
+                label="Entrance Type"
                 variant="outlined"
                 InputLabelProps={{
                   shrink: true,

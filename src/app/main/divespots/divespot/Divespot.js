@@ -15,14 +15,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
-import { getProduct, newProduct, resetProduct, selectProduct } from '../store/productSlice';
+import { getDivespot, newDivespot, resetDivespot, selectDivespot } from '../store/divespotSlice';
 import reducer from '../store';
-import ProductHeader from './DivespotHeader';
+import DivespotHeader from './DivespotHeader';
 import BasicInfoTab from './tabs/BasicInfoTab';
-import InventoryTab from './tabs/InventoryTab';
-import PricingTab from './tabs/PricingTab';
-import ProductImagesTab from './tabs/ProductImagesTab';
-import ShippingTab from './tabs/ShippingTab';
+import SealifeTab from './tabs/PricingTab';
+import DivespotImagesTab from './tabs/DivespotImagesTab';
+import ReviewsTab from './tabs/ShippingTab';
 
 /**
  * Form Validation Schema
@@ -30,18 +29,18 @@ import ShippingTab from './tabs/ShippingTab';
 const schema = yup.object().shape({
   name: yup
     .string()
-    .required('You must enter a product name')
-    .min(5, 'The product name must be at least 5 characters'),
+    .required('You must enter a divespot name')
+    .min(5, 'The divespot name must be at least 5 characters'),
 });
 
-function Product(props) {
+function Divespot(props) {
   const dispatch = useDispatch();
-  const product = useSelector(selectProduct);
+  const divespot = useSelector(selectDivespot);
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   const routeParams = useParams();
   const [tabValue, setTabValue] = useState(0);
-  const [noProduct, setNoProduct] = useState(false);
+  const [noDivespot, setNoDivespot] = useState(false);
   const methods = useForm({
     mode: 'onChange',
     defaultValues: {},
@@ -51,49 +50,49 @@ function Product(props) {
   const form = watch();
 
   useDeepCompareEffect(() => {
-    function updateProductState() {
-      const { productId } = routeParams;
+    function updateDivespotState() {
+      const { divespotId } = routeParams;
 
-      if (productId === 'new') {
+      if (divespotId === 'new') {
         /**
-         * Create New Product data
+         * Create New Divespot data
          */
-        dispatch(newProduct());
+        dispatch(newDivespot());
       } else {
         /**
-         * Get Product data
+         * Get Divespot data
          */
-        dispatch(getProduct(productId)).then((action) => {
+        dispatch(getDivespot(divespotId)).then((action) => {
           /**
-           * If the requested product is not exist show message
+           * If the requested divespot is not exist show message
            */
           if (!action.payload) {
-            setNoProduct(true);
+            setNoDivespot(true);
           }
         });
       }
     }
 
-    updateProductState();
+    updateDivespotState();
   }, [dispatch, routeParams]);
 
   useEffect(() => {
-    if (!product) {
+    if (!divespot) {
       return;
     }
     /**
-     * Reset the form on product state changes
+     * Reset the form on divespot state changes
      */
-    reset(product);
-  }, [product, reset]);
+    reset(divespot);
+  }, [divespot, reset]);
 
   useEffect(() => {
     return () => {
       /**
-       * Reset Product on component unload
+       * Reset Divespot on component unload
        */
-      dispatch(resetProduct());
-      setNoProduct(false);
+      dispatch(resetDivespot());
+      setNoDivespot(false);
     };
   }, [dispatch]);
 
@@ -105,9 +104,9 @@ function Product(props) {
   }
 
   /**
-   * Show Message if the requested products is not exists
+   * Show Message if the requested divespots is not exists
    */
-  if (noProduct) {
+  if (noDivespot) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -115,27 +114,27 @@ function Product(props) {
         className="flex flex-col flex-1 items-center justify-center h-full"
       >
         <Typography color="text.secondary" variant="h5">
-          There is no such product!
+          There is no such divespot!
         </Typography>
         <Button
           className="mt-24"
           component={Link}
           variant="outlined"
-          to="/apps/e-commerce/products"
+          to="/apps/e-commerce/divespots"
           color="inherit"
         >
-          Go to Products Page
+          Go to Divespots Page
         </Button>
       </motion.div>
     );
   }
 
   /**
-   * Wait while product data is loading and form is setted
+   * Wait while divespot data is loading and form is setted
    */
   if (
     _.isEmpty(form) ||
-    (product && routeParams.productId !== product.id && routeParams.productId !== 'new')
+    (divespot && routeParams.divespotId !== divespot.id.toString() && routeParams.divespotId !== 'new')
   ) {
     return <FuseLoading />;
   }
@@ -143,7 +142,7 @@ function Product(props) {
   return (
     <FormProvider {...methods}>
       <FusePageCarded
-        header={<ProductHeader />}
+        header={<DivespotHeader />}
         content={
           <>
             <Tabs
@@ -156,10 +155,9 @@ function Product(props) {
               classes={{ root: 'w-full h-64 border-b-1' }}
             >
               <Tab className="h-64" label="Basic Info" />
-              <Tab className="h-64" label="Product Images" />
-              <Tab className="h-64" label="Pricing" />
-              <Tab className="h-64" label="Inventory" />
-              <Tab className="h-64" label="Shipping" />
+              <Tab className="h-64" label="Divespot Images" disabled/>
+              <Tab className="h-64" label="Sea life" disabled/>
+              <Tab className="h-64" label="Reviews" disabled/>
             </Tabs>
             <div className="p-16 sm:p-24 max-w-3xl">
               <div className={tabValue !== 0 ? 'hidden' : ''}>
@@ -167,19 +165,15 @@ function Product(props) {
               </div>
 
               <div className={tabValue !== 1 ? 'hidden' : ''}>
-                <ProductImagesTab />
+                <DivespotImagesTab />
               </div>
 
               <div className={tabValue !== 2 ? 'hidden' : ''}>
-                <PricingTab />
+                <SealifeTab />
               </div>
 
               <div className={tabValue !== 3 ? 'hidden' : ''}>
-                <InventoryTab />
-              </div>
-
-              <div className={tabValue !== 4 ? 'hidden' : ''}>
-                <ShippingTab />
+                <ReviewsTab />
               </div>
             </div>
           </>
@@ -190,4 +184,4 @@ function Product(props) {
   );
 }
 
-export default withReducer('eCommerceApp', reducer)(Product);
+export default withReducer('DV', reducer)(Divespot);

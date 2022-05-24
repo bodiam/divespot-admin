@@ -76,7 +76,7 @@ function ToolbarLayout1(props) {
               <ChatPanelToggleButton />
                   </Hidden>*/}
 
-            <QuickPanelToggleButton />
+            {/*<QuickPanelToggleButton />*/}
 
             {/*<NotificationPanelToggleButton />*/}
 

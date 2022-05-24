@@ -2,6 +2,7 @@ import FuseUtils from '@fuse/utils/FuseUtils';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import jwtServiceConfig from './jwtServiceConfig';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 /* eslint-disable camelcase */
 
@@ -30,6 +31,9 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   handleAuthentication = () => {
+    //make sure to delete this two lines when auto login is ready
+    this.emit('onNoAccessToken');
+    return;
     const access_token = this.getAccessToken();
 
     if (!access_token) {
@@ -40,7 +44,8 @@ class JwtService extends FuseUtils.EventEmitter {
 
     if (this.isAuthTokenValid(access_token)) {
       this.setSession(access_token);
-      this.emit('onAutoLogin', true);
+      //no auto login for the moment until Erik adds /authenticateWithToken
+      //this.emit('onAutoLogin', true);
     } else {
       this.setSession(null);
       this.emit('onAutoLogout', 'access_token expired');
@@ -64,17 +69,26 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithEmailAndPassword = (email, password) => {
     return new Promise((resolve, reject) => {
       axios
-        .get(jwtServiceConfig.signIn, {
-          data: {
-            email,
-            password,
-          },
+        .post("/authenticate", {
+          username: email,
+          password,
         })
         .then((response) => {
-          if (response.data.user) {
+          /*if (response.data.user) {
             this.setSession(response.data.access_token);
             resolve(response.data.user);
             this.emit('onLogin', response.data.user);
+          } else {
+            reject(response.data.error);
+          }*/
+          if (response.data) {
+            this.setSession(response.data.token);
+            resolve(response.data);
+            this.emit('onLogin', {
+              username: email,
+              password,
+              role: 'admin'
+            });
           } else {
             reject(response.data.error);
           }

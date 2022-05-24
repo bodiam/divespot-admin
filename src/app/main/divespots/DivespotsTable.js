@@ -15,17 +15,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import withRouter from '@fuse/core/withRouter';
 import FuseLoading from '@fuse/core/FuseLoading';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { getProducts, selectProducts, selectProductsSearchText } from '../store/productsSlice';
-import ProductsTableHead from './DivespotsTableHead';
+import { getDivespots, selectDivespots, selectDivespotsSearchText } from './store/divespotsSlice';
+import DivespotsTableHead from './DivespotsTableHead';
 
-function ProductsTable(props) {
+function DivespotsTable(props) {
   const dispatch = useDispatch();
-  const products = useSelector(selectProducts);
-  const searchText = useSelector(selectProductsSearchText);
+  const divespots = useSelector(selectDivespots);
+  const searchText = useSelector(selectDivespotsSearchText);
 
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState([]);
-  const [data, setData] = useState(products);
+  const [data, setData] = useState(divespots);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState({
@@ -34,19 +34,19 @@ function ProductsTable(props) {
   });
 
   useEffect(() => {
-    dispatch(getProducts()).then(() => setLoading(false));
+    dispatch(getDivespots()).then(() => setLoading(false));
   }, [dispatch]);
 
   useEffect(() => {
     if (searchText.length !== 0) {
       setData(
-        _.filter(products, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
+        _.filter(divespots, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
       );
       setPage(0);
     } else {
-      setData(products);
+      setData(divespots);
     }
-  }, [products, searchText]);
+  }, [divespots, searchText]);
 
   function handleRequestSort(event, property) {
     const id = property;
@@ -75,7 +75,7 @@ function ProductsTable(props) {
   }
 
   function handleClick(item) {
-    props.navigate(`/apps/e-commerce/products/${item.id}/${item.handle}`);
+    props.navigate(`/divespots/${item.id}`);
   }
 
   function handleCheck(event, id) {
@@ -122,7 +122,7 @@ function ProductsTable(props) {
         className="flex flex-1 items-center justify-center h-full"
       >
         <Typography color="text.secondary" variant="h5">
-          There are no products!
+          There are no divespots!
         </Typography>
       </motion.div>
     );
@@ -132,8 +132,8 @@ function ProductsTable(props) {
     <div className="w-full flex flex-col min-h-full">
       <FuseScrollbars className="grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <ProductsTableHead
-            selectedProductIds={selected}
+          <DivespotsTableHead
+            selectedDivespotIds={selected}
             order={order}
             onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
@@ -180,63 +180,27 @@ function ProductsTable(props) {
                       />
                     </TableCell>
 
-                    <TableCell
-                      className="w-52 px-4 md:px-0"
-                      component="th"
-                      scope="row"
-                      padding="none"
-                    >
-                      {n.images.length > 0 && n.featuredImageId ? (
-                        <img
-                          className="w-full block rounded"
-                          src={_.find(n.images, { id: n.featuredImageId }).url}
-                          alt={n.name}
-                        />
-                      ) : (
-                        <img
-                          className="w-full block rounded"
-                          src="assets/images/apps/ecommerce/product-image-placeholder.png"
-                          alt={n.name}
-                        />
-                      )}
-                    </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row">
                       {n.name}
                     </TableCell>
 
-                    <TableCell className="p-4 md:p-16 truncate" component="th" scope="row">
-                      {n.categories.join(', ')}
+                    <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
+                      {n.location}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      <span>$</span>
-                      {n.priceTaxIncl}
+                      {n.entranceType}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.quantity}
-                      <i
-                        className={clsx(
-                          'inline-block w-8 h-8 rounded mx-8',
-                          n.quantity <= 5 && 'bg-red',
-                          n.quantity > 5 && n.quantity <= 25 && 'bg-orange',
-                          n.quantity > 25 && 'bg-green'
-                        )}
-                      />
+                      {n.createdBy}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.active ? (
-                        <FuseSvgIcon className="text-green" size={20}>
-                          heroicons-outline:check-circle
-                        </FuseSvgIcon>
-                      ) : (
-                        <FuseSvgIcon className="text-red" size={20}>
-                          heroicons-outline:minus-circle
-                        </FuseSvgIcon>
-                      )}
+                      {n.createdAt}
                     </TableCell>
+
                   </TableRow>
                 );
               })}
@@ -263,4 +227,4 @@ function ProductsTable(props) {
   );
 }
 
-export default withRouter(ProductsTable);
+export default withRouter(DivespotsTable);
