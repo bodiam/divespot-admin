@@ -22,20 +22,23 @@ function DivespotsTable(props) {
   const dispatch = useDispatch();
   const divespots = useSelector(selectDivespots);
   const searchText = useSelector(selectDivespotsSearchText);
+  const totalPages = useSelector(({DV}) =>  DV.divespots.totalPages);
+  const totalElements = useSelector(({DV}) =>  DV.divespots.totalElements);
 
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState(divespots);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   const [order, setOrder] = useState({
     direction: 'asc',
     id: null,
   });
 
   useEffect(() => {
-    dispatch(getDivespots()).then(() => setLoading(false));
-  }, [dispatch]);
+    setLoading(true)
+    dispatch(getDivespots({page, rowsPerPage})).then(() => setLoading(false));
+  }, [dispatch, page, rowsPerPage]);
 
   useEffect(() => {
     if (searchText.length !== 0) {
@@ -147,9 +150,6 @@ function DivespotsTable(props) {
               [
                 (o) => {
                   switch (order.id) {
-                    case 'categories': {
-                      return o.categories[0];
-                    }
                     default: {
                       return o[order.id];
                     }
@@ -158,7 +158,7 @@ function DivespotsTable(props) {
               ],
               [order.direction]
             )
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              //.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((n) => {
                 const isSelected = selected.indexOf(n.id) !== -1;
                 return (
@@ -211,8 +211,9 @@ function DivespotsTable(props) {
       <TablePagination
         className="shrink-0 border-t-1"
         component="div"
-        count={data.length}
+        count={totalElements}
         rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[20,50,100,200]}
         page={page}
         backIconButtonProps={{
           'aria-label': 'Previous Page',

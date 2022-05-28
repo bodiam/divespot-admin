@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import _ from '@lodash';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { removeDivespot, saveDivespot } from '../store/divespotSlice';
+import dirtyValues from '../../../utils/dirtyValues'
 
 function DivespotHeader(props) {
   const dispatch = useDispatch();
@@ -21,12 +22,13 @@ function DivespotHeader(props) {
   const navigate = useNavigate();
 
   function handleSaveDivespot() {
-    dispatch(saveDivespot(getValues()));
+    dispatch(saveDivespot(dirtyValues(dirtyFields, getValues())));
   }
+
 
   function handleRemoveDivespot() {
     dispatch(removeDivespot()).then(() => {
-      navigate('/apps/e-commerce/divespots');
+      navigate('/divespots');
     });
   }
 
@@ -41,7 +43,7 @@ function DivespotHeader(props) {
             className="flex items-center sm:mb-12"
             component={Link}
             role="button"
-            to="/apps/e-commerce/divespots"
+            to="/divespots"
             color="inherit"
           >
             <FuseSvgIcon size={20}>
@@ -59,19 +61,13 @@ function DivespotHeader(props) {
             initial={{ scale: 0 }}
             animate={{ scale: 1, transition: { delay: 0.3 } }}
           >
-            {images?.length > 0 && featuredImageId ? (
+            {images?.length > 0 && featuredImageId && (
               <img
                 className="w-32 sm:w-48 rounded"
                 src={_.find(images, { id: featuredImageId }).url}
                 alt={name}
               />
-            ) : (
-              <img
-                className="w-32 sm:w-48 rounded"
-                src="assets/images/apps/ecommerce/divespot-image-placeholder.png"
-                alt={name}
-              />
-            )}
+            ) }
           </motion.div>
           <motion.div
             className="flex flex-col items-center sm:items-start min-w-0 mx-8 sm:mx-16"

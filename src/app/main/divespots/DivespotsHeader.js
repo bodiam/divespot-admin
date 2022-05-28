@@ -52,7 +52,7 @@ function DivespotsHeader(props) {
           <Button
             className=""
             component={Link}
-            to="/apps/e-commerce/divespots/new"
+            to="/divespots/new"
             variant="contained"
             color="secondary"
             startIcon={<FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>}

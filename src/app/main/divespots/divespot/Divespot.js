@@ -30,7 +30,6 @@ const schema = yup.object().shape({
   name: yup
     .string()
     .required('You must enter a divespot name')
-    .min(5, 'The divespot name must be at least 5 characters'),
 });
 
 function Divespot(props) {
@@ -134,7 +133,7 @@ function Divespot(props) {
    */
   if (
     _.isEmpty(form) ||
-    (divespot && routeParams.divespotId !== divespot.id.toString() && routeParams.divespotId !== 'new')
+    (divespot && routeParams.divespotId !== divespot.id?.toString() && routeParams.divespotId !== 'new')
   ) {
     return <FuseLoading />;
   }

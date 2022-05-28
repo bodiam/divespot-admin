@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import FuseUtils from '@fuse/utils';
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-axios.defaults.headers.common.Authorization = `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaGFzc2VuQGRpdmVzcG90LmNvbSIsImlhdCI6MTY1MzM4MDgwMSwiZXhwIjoxNjUzMzk4ODAxfQ.OJB43zUzZeO-9fa2HMsvxqHno9s3BEpX_lOUurTMIF_L72Q2Mz54_-n-mQWiu3gBsp1Pv5ehSYqV4CMBW9JHbg`;
+//axios.defaults.headers.common.Authorization = `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaGFzc2VuQGRpdmVzcG90LmNvbSIsImlhdCI6MTY1MzM4MDgwMSwiZXhwIjoxNjUzMzk4ODAxfQ.OJB43zUzZeO-9fa2HMsvxqHno9s3BEpX_lOUurTMIF_L72Q2Mz54_-n-mQWiu3gBsp1Pv5ehSYqV4CMBW9JHbg`;
 
 export const getDivespot = createAsyncThunk('divespot/getDivespot', async (divespotId) => {
   const response = await axios.get(`/admin/divespot/${divespotId}`);
@@ -24,8 +24,12 @@ export const saveDivespot = createAsyncThunk(
   'divespot/saveDivespot',
   async (divespotData, { dispatch, getState }) => {
     const { id } = getState().DV.divespot;
-
-    const response = await axios.put(`/admin/divespot/${id}`, divespotData);
+    var response;
+  if(id){
+     response = await axios.patch(`/admin/divespot/${id}`, divespotData);
+  }else{
+    response = await axios.post(`/admin/divespot`, divespotData);
+  }
 
     const data = await response.data;
 
@@ -42,29 +46,17 @@ const divespotSlice = createSlice({
       reducer: (state, action) => action.payload,
       prepare: (event) => ({
         payload: {
-          id: FuseUtils.generateGUID(),
+          id: null,
           name: '',
           location: '',
           entranceType: '',
           createdBy: '',
           createdAt: '',
-          handle: '',
           description: '',
-          categories: [],
           tags: [],
-          images: [],
-          priceTaxExcl: 0,
-          priceTaxIncl: 0,
-          taxRate: 0,
-          comparedPrice: 0,
-          quantity: 0,
-          sku: '',
-          width: '',
-          height: '',
-          depth: '',
-          weight: '',
-          extraShippingFee: 0,
-          active: true,
+          sealife: [],
+          reviews: []
+
         },
       }),
     },
