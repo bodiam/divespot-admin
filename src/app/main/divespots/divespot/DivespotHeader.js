@@ -9,6 +9,7 @@ import _ from '@lodash';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { removeDivespot, saveDivespot } from '../store/divespotSlice';
 import dirtyValues from '../../../utils/dirtyValues'
+import { useSelector } from 'react-redux';
 
 function DivespotHeader(props) {
   const dispatch = useDispatch();
@@ -20,9 +21,10 @@ function DivespotHeader(props) {
   const name = watch('name');
   const theme = useTheme();
   const navigate = useNavigate();
+	const user = useSelector(({user}) => user);
 
   function handleSaveDivespot() {
-    dispatch(saveDivespot(dirtyValues(dirtyFields, getValues())));
+    dispatch(saveDivespot(dirtyValues(dirtyFields, { ...getValues(), author: user.id })));
   }
 
 

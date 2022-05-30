@@ -136,7 +136,8 @@
         "eject": "react-app-rewired eject",
         "build-docs": "babel-node --presets @babel/preset-env src/app/main/documentation/material-ui-components/build.js",
         "analyze": "react-app-rewired build && source-map-explorer 'build/static/js/*.js' --html analyze-result.html",
-        "lint": "eslint"
+        "lint": "eslint",
+        "deploy": "git push heroku main"
     },
     "engines": {
         "node": ">=14.0.0",
