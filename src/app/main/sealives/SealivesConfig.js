@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 
-const Divespot = lazy(() => import('./divespot/Divespot'));
-const Divespots = lazy(() => import('./Divespots'));
+const Divespot = lazy(() => import('./sealife/Sealife'));
+const Divespots = lazy(() => import('./Sealives'));
 
 
 const DivespotsConfig = {

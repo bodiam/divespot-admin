@@ -16,7 +16,7 @@ import withRouter from '@fuse/core/withRouter';
 import FuseLoading from '@fuse/core/FuseLoading';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { getDivespots, selectDivespots, selectDivespotsSearchText } from './store/reviewsSlice';
-import DivespotsTableHead from './DivespotsTableHead';
+import ReviewsTableHead from './ReviewsTableHead';
 
 function DivespotsTable(props) {
   const dispatch = useDispatch();
@@ -135,7 +135,7 @@ function DivespotsTable(props) {
     <div className="w-full flex flex-col min-h-full">
       <FuseScrollbars className="grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <DivespotsTableHead
+          <ReviewsTableHead
             selectedDivespotIds={selected}
             order={order}
             onSelectAllClick={handleSelectAllClick}

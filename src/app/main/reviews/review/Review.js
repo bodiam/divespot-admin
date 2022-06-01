@@ -19,9 +19,6 @@ import { getDivespot, newDivespot, resetDivespot, selectDivespot } from '../stor
 import reducer from '../store';
 import DivespotHeader from './ReviewHeader';
 import BasicInfoTab from './tabs/BasicInfoTab';
-import SealifeTab from './tabs/PricingTab';
-import DivespotImagesTab from './tabs/DivespotImagesTab';
-import ReviewsTab from './tabs/ShippingTab';
 
 /**
  * Form Validation Schema
@@ -154,25 +151,10 @@ function Divespot(props) {
               classes={{ root: 'w-full h-64 border-b-1' }}
             >
               <Tab className="h-64" label="Basic Info" />
-              <Tab className="h-64" label="Divespot Images" disabled/>
-              <Tab className="h-64" label="Sea life" disabled/>
-              <Tab className="h-64" label="Reviews" disabled/>
             </Tabs>
             <div className="p-16 sm:p-24 max-w-3xl">
               <div className={tabValue !== 0 ? 'hidden' : ''}>
                 <BasicInfoTab />
-              </div>
-
-              <div className={tabValue !== 1 ? 'hidden' : ''}>
-                <DivespotImagesTab />
-              </div>
-
-              <div className={tabValue !== 2 ? 'hidden' : ''}>
-                <SealifeTab />
-              </div>
-
-              <div className={tabValue !== 3 ? 'hidden' : ''}>
-                <ReviewsTab />
               </div>
             </div>
           </>
