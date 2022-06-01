@@ -10,6 +10,9 @@ import dashboardsConfigs from '../main/dashboards/dashboardsConfigs';
 import appsConfigs from '../main/apps/appsConfigs';
 import pagesConfigs from '../main/pages/pagesConfigs';
 import DivespotsConfig from '../main/divespots/DivespotsConfig';
+import SealivesConfig from '../main/sealives/SealivesConfig';
+import ReviewsConfig from '../main/reviews/ReviewsConfig';
+
 import authRoleExamplesConfigs from '../main/auth/authRoleExamplesConfigs';
 
 const routeConfigs = [
@@ -17,6 +20,8 @@ const routeConfigs = [
   ...dashboardsConfigs,
   ...pagesConfigs,
   DivespotsConfig,
+  SealivesConfig,
+  ReviewsConfig,
   ...authRoleExamplesConfigs,
   ...userInterfaceConfigs,
   SignOutConfig,
