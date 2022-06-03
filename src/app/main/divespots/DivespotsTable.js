@@ -213,7 +213,7 @@ function DivespotsTable(props) {
         component="div"
         count={totalElements}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[20,50,100,200]}
+        rowsPerPageOptions={[5,20,50,100,200]}
         page={page}
         backIconButtonProps={{
           'aria-label': 'Previous Page',
@@ -221,6 +221,8 @@ function DivespotsTable(props) {
         nextIconButtonProps={{
           'aria-label': 'Next Page',
         }}
+        showFirstButton
+        showLastButton
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />

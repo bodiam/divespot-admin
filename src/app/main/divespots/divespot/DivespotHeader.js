@@ -21,10 +21,19 @@ function DivespotHeader(props) {
   const name = watch('name');
   const theme = useTheme();
   const navigate = useNavigate();
-	const user = useSelector(({user}) => user);
+  const user = useSelector(({ user }) => user);
 
   function handleSaveDivespot() {
-    dispatch(saveDivespot(dirtyValues(dirtyFields, { ...getValues(), author: user.id })));
+    dispatch(saveDivespot(
+      {
+        ...dirtyValues(dirtyFields, getValues()),
+        author: user.id,
+        price: {
+          amount: getValues().amount,
+          code: getValues().code
+        }
+      }
+    ));
   }
 
 
@@ -69,7 +78,7 @@ function DivespotHeader(props) {
                 src={_.find(images, { id: featuredImageId }).url}
                 alt={name}
               />
-            ) }
+            )}
           </motion.div>
           <motion.div
             className="flex flex-col items-center sm:items-start min-w-0 mx-8 sm:mx-16"
