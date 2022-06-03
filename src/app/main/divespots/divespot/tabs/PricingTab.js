@@ -1,6 +1,8 @@
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import { Controller, useFormContext } from 'react-hook-form';
+import codes from "./codes"
+import Autocomplete from '@mui/material/Autocomplete';
 
 function PricingTab(props) {
   const methods = useFormContext();
@@ -9,17 +11,14 @@ function PricingTab(props) {
   return (
     <div>
       <Controller
-        name="priceTaxExcl"
+        name="amount"
         control={control}
         render={({ field }) => (
           <TextField
             {...field}
             className="mt-8 mb-16"
-            label="Tax Excluded Price"
-            id="priceTaxExcl"
-            InputProps={{
-              startAdornment: <InputAdornment position="start">$</InputAdornment>,
-            }}
+            label="Amount"
+            id="amount"
             type="number"
             variant="outlined"
             autoFocus
@@ -28,63 +27,34 @@ function PricingTab(props) {
         )}
       />
 
-      <Controller
-        name="priceTaxIncl"
+<Controller
+        name="code"
         control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
+        defaultValue={[]}
+        render={({ field: { onChange, value } }) => (
+          <Autocomplete
             className="mt-8 mb-16"
-            label="Tax Included Price"
-            id="priceTaxIncl"
-            InputProps={{
-              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+            options={codes}
+            value={value}
+            onChange={(event, newValue) => {
+              onChange(newValue);
             }}
-            type="number"
-            variant="outlined"
-            fullWidth
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Select Currency Code"
+                label="Code"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
           />
         )}
       />
 
-      <Controller
-        name="taxRate"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className="mt-8 mb-16"
-            label="Tax Rate"
-            id="taxRate"
-            InputProps={{
-              startAdornment: <InputAdornment position="start">$</InputAdornment>,
-            }}
-            type="number"
-            variant="outlined"
-            fullWidth
-          />
-        )}
-      />
 
-      <Controller
-        name="comparedPrice"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className="mt-8 mb-16"
-            label="Compared Price"
-            id="comparedPrice"
-            InputProps={{
-              startAdornment: <InputAdornment position="start">$</InputAdornment>,
-            }}
-            type="number"
-            variant="outlined"
-            fullWidth
-            helperText="Add a compare price to show next to the real price"
-          />
-        )}
-      />
     </div>
   );
 }

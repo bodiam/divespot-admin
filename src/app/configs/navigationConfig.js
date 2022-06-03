@@ -15,6 +15,18 @@ const navigationConfig = [
     title: 'Dive Spots',
     type: 'item',
     url: '/divespots',
+  },
+  {
+    id: 'sealives',
+    title: 'Sealife',
+    type: 'item',
+    url: '/sealives',
+  },
+  {
+    id: 'reviews',
+    title: 'Reviews',
+    type: 'item',
+    url: '/reviews',
   }
 ];
 

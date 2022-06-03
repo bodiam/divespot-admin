@@ -106,29 +106,24 @@ function DivespotImagesTab(props) {
             </Box>
           )}
         />
-        <Controller
-          name="featuredImageId"
-          control={control}
-          defaultValue=""
-          render={({ field: { onChange, value } }) =>
-            images?.map((media) => (
-              <div
-                onClick={() => onChange(media.id)}
-                onKeyDown={() => onChange(media.id)}
-                role="button"
-                tabIndex={0}
-                className={clsx(
-                  'divespotImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg',
-                  media.id === value && 'featured'
-                )}
-                key={media.id}
-              >
-                <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:star</FuseSvgIcon>
-                <img className="max-w-none w-auto h-full" src={media.url} alt="divespot" />
-              </div>
-            ))
-          }
-        />
+
+        {images?.map((media) => (
+          <div
+            onClick={() => onChange(media.id)}
+            onKeyDown={() => onChange(media.id)}
+            role="button"
+            tabIndex={0}
+            className={clsx(
+              'divespotImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg',
+              media.id === value && 'featured'
+            )}
+            key={media.id}
+          >
+            <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:star</FuseSvgIcon>
+            <img className="max-w-none w-auto h-full" src={media.url} alt="divespot" />
+          </div>
+        ))}
+
       </div>
     </Root>
   );

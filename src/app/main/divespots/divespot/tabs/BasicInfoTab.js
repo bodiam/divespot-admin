@@ -76,6 +76,7 @@ function BasicInfoTab(props) {
                 id="latitude"
                 variant="outlined"
                 fullWidth
+                type="number"
               />
             )}
           />
@@ -94,6 +95,26 @@ function BasicInfoTab(props) {
                 id="longitude"
                 variant="outlined"
                 fullWidth
+                type="number"
+              />
+            )}
+          />
+
+<Controller
+            name="depth"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                className="mt-8 mb-16"
+                error={!!errors.longitude}
+                helperText={errors?.longitude?.message}
+                label="Depth"
+                autoFocus
+                id="depth"
+                variant="outlined"
+                fullWidth
+                type="number"
               />
             )}
           />
