@@ -2,25 +2,37 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Controller, useFormContext } from 'react-hook-form';
 import GoogleMap from 'google-map-react';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import Tooltip from '@mui/material/Tooltip';
+import { useState } from 'react';
 
 
-function Marker(props) {
-  return (
-    <Tooltip title={props.text} placement="top">
-      <FuseSvgIcon className="text-red">heroicons-outline:location-marker</FuseSvgIcon>
-    </Tooltip>
-  );
-}
-
+let marker;
 function BasicInfoTab(props) {
   const methods = useFormContext();
-  const { control, formState, watch } = methods;
+  const { control, formState, watch, setValue } = methods;
   const { errors } = formState;
   const name = watch('name');
   const latitude = watch('latitude');
   const longitude = watch('longitude');
+  var loadMap = (map, maps) => {
+
+     marker =new maps.Marker({
+      title: name,
+      position: { lat: latitude, lng: longitude },
+      map,
+      draggable: true
+    })
+
+
+    maps.event.addListener(marker, 'drag', function(event){
+      setValue("latitude", event.latLng.lat())
+      setValue("longitude", event.latLng.lng())
+  });
+
+
+  };
+
+
+
 
   return (
     <div>
@@ -65,9 +77,14 @@ function BasicInfoTab(props) {
           <Controller
             name="latitude"
             control={control}
-            render={({ field }) => (
+            render={({ field: {value, onChange} }) => (
               <TextField
-                {...field}
+                value={value}
+                onChange={(e)=>{
+                  onChange(e.target.value)
+                  marker.setPosition({lat: parseFloat(e.target.value), lng: longitude})
+                  marker.map.setCenter({lat: parseFloat(e.target.value), lng: longitude})
+                }}
                 className="mt-8 mb-16"
                 error={!!errors.latitude}
                 helperText={errors?.latitude?.message}
@@ -84,9 +101,14 @@ function BasicInfoTab(props) {
           <Controller
             name="longitude"
             control={control}
-            render={({ field }) => (
+            render={({ field:{value, onChange} }) => (
               <TextField
-                {...field}
+              value={value}
+              onChange={(e)=>{
+                onChange(e.target.value)
+                marker.setPosition({lat: latitude, lng: parseFloat(e.target.value)})
+                marker.map.setCenter({lat: latitude, lng: parseFloat(e.target.value)})
+              }}
                 className="mt-8 mb-16"
                 error={!!errors.longitude}
                 helperText={errors?.longitude?.message}
@@ -100,7 +122,7 @@ function BasicInfoTab(props) {
             )}
           />
 
-<Controller
+          <Controller
             name="depth"
             control={control}
             render={({ field }) => (
@@ -118,25 +140,22 @@ function BasicInfoTab(props) {
               />
             )}
           />
+
         </div>
 
         <div className="w-full h-320 rounded-16 overflow-hidden mx-8">
           <GoogleMap
             bootstrapURLKeys={{
               key: process.env.REACT_APP_MAP_KEY,
-            }}
-            defaultZoom={0}
-            defaultCenter={[
+            }} defaultCenter={[
               latitude,
               longitude,
             ]}
+            defaultZoom={5}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({ map, maps }) => loadMap(map, maps)}
           >
-            <Marker
-              text={name}
-              lat={latitude}
-              lng={longitude}
-            />
-          </GoogleMap>
+            </GoogleMap>
         </div>
 
       </div>
@@ -223,7 +242,7 @@ function BasicInfoTab(props) {
       />
 
 
-<Controller
+      <Controller
         name="tags"
         control={control}
         defaultValue={[]}
@@ -252,7 +271,7 @@ function BasicInfoTab(props) {
         )}
       />
 
-      
+
 
 
     </div>

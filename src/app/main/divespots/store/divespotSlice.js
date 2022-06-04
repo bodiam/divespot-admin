@@ -8,6 +8,10 @@ export const getDivespot = createAsyncThunk('divespot/getDivespot', async (dives
   const response = await axios.get(`/admin/divespot/${divespotId}`);
   const data = await response.data;
 
+
+  const sealife = await axios.get(`/admin/divespot/${divespotId}/sealife`);
+  data.sealife = await sealife.data.content
+
   return data === undefined ? null : data;
 });
 
