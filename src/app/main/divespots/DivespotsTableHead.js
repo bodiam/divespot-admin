@@ -26,10 +26,10 @@ const rows = [
     sort: true,
   },
   {
-    id: 'location',
+    id: 'diveLocation',
     align: 'right',
     disablePadding: false,
-    label: 'Location',
+    label: 'Dive Location',
     sort: true,
   },
   {
@@ -40,14 +40,14 @@ const rows = [
     sort: true,
   },
   {
-    id: 'createdBy',
+    id: 'author',
     align: 'right',
     disablePadding: false,
-    label: 'Created By',
+    label: 'Author',
     sort: true,
   },
   {
-    id: 'createdAt',
+    id: 'dateCreated',
     align: 'right',
     disablePadding: false,
     label: 'Created At',

@@ -27,18 +27,17 @@ function DivespotHeader(props) {
   const theme = useTheme();
   const navigate = useNavigate();
   const user = useSelector(({ user }) => user);
-
+console.log(user)
   function handleSaveDivespot() {
     dispatch(saveDivespot(
       {
-        ...dirtyValues(dirtyFields, getValues()),
-        author: user.id,
-        price: {
-          amount: getValues().amount,
-          code: getValues().code
-        }
+        //...dirtyValues(dirtyFields, getValues()),
+        ...getValues(),
+        author: user.username,
       }
-    ));
+    )).then(() => {
+      navigate('/divespots');
+    });
   }
 
 

@@ -186,7 +186,7 @@ function DivespotsTable(props) {
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.location}
+                      {`${parseFloat(n.diveLocation.latitude).toFixed(6)}, ${parseFloat(n.diveLocation.longitude).toFixed(6)}`}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
@@ -194,11 +194,11 @@ function DivespotsTable(props) {
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.createdBy}
+                      {n.author}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.createdAt}
+                      {n.dateCreated? new Date(n.dateCreated).toLocaleString(): 'N/A'}
                     </TableCell>
 
                   </TableRow>

@@ -30,7 +30,7 @@ function DivespotHeader(props) {
 
   function handleRemoveDivespot() {
     dispatch(removeDivespot()).then(() => {
-      navigate('/divespots');
+      navigate('/reviews');
     });
   }
 

@@ -65,20 +65,20 @@ const divespotSlice = createSlice({
             minDepth: 0,
             maxDepth: 0
           },
-          entranceType: null,
-          level: null,
-          diveSiteType: null,
+          entranceType: '',
+          level: '',
+          diveSiteType: '',
           author: '',
-          dateCreated: new Date().toLocaleString(),
+          //dateCreated: new Date().toLocaleString(),
           description: '',
           tags: [],
           sealife: [],
           reviews: [],
           price: {          
             amount: 0,
-            code: null
-          }
-
+            code: ''
+          },
+          dateCreated: new Date().toISOString()
         },
       }),
     },
