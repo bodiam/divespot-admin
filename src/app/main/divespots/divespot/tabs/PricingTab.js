@@ -14,7 +14,7 @@ function PricingTab(props) {
   return (
     <div>
       <Controller
-        name="amount"
+        name="price.amount"
         control={control}
         render={({ field }) => (
           <TextField
@@ -26,15 +26,13 @@ function PricingTab(props) {
             variant="outlined"
             autoFocus
             fullWidth
-            defaultValue={divespot.price.amount}
           />
         )}
       />
 
 <Controller
-        name="code"
+        name="price.code"
         control={control}
-        defaultValue={divespot.price.code}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"

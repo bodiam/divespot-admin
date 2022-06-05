@@ -10,7 +10,7 @@ export const getDivespot = createAsyncThunk('divespot/getDivespot', async (dives
 
 
   const sealife = await axios.get(`/admin/divespot/${divespotId}/sealife`);
-  data.sealife = await sealife.data.content
+  data.sealife = await sealife.data?.content?.value
 
   return data === undefined ? null : data;
 });
@@ -53,13 +53,31 @@ const divespotSlice = createSlice({
           id: null,
           name: '',
           location: '',
-          entranceType: '',
+          diveLocation: {
+            latitude: 50,
+            longitude: 50
+          },
+          startLocation: {
+            latitude: 51,
+            longitude: 50
+          },
+          depth: {
+            minDepth: 0,
+            maxDepth: 0
+          },
+          entranceType: null,
+          level: null,
+          diveSiteType: null,
           author: '',
           dateCreated: new Date().toLocaleString(),
           description: '',
           tags: [],
           sealife: [],
-          reviews: []
+          reviews: [],
+          price: {          
+            amount: 0,
+            code: null
+          }
 
         },
       }),

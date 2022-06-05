@@ -10,6 +10,11 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { removeDivespot, saveDivespot } from '../store/divespotSlice';
 import dirtyValues from '../../../utils/dirtyValues'
 import { useSelector } from 'react-redux';
+import { closeDialog, openDialog } from 'app/store/fuse/dialogSlice';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
 
 function DivespotHeader(props) {
   const dispatch = useDispatch();
@@ -38,9 +43,38 @@ function DivespotHeader(props) {
 
 
   function handleRemoveDivespot() {
-    dispatch(removeDivespot()).then(() => {
-      navigate('/divespots');
-    });
+    dispatch(
+      openDialog({
+        children: (
+          <>
+            <DialogTitle id="alert-dialog-title">Are you sure?</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                This lovely divespot will be deleted !
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => dispatch(closeDialog())} color="primary">
+                Disagree
+              </Button>
+              <Button
+                onClick={() => {
+                  dispatch(removeDivespot()).then(() => {
+                    navigate('/divespots');
+                  });
+                  dispatch(closeDialog());
+                }}
+                color="primary"
+                autoFocus
+              >
+                Agree
+              </Button>
+            </DialogActions>
+          </>
+        ),
+      })
+    );
+
   }
 
   return (

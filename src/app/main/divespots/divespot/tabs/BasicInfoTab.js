@@ -2,31 +2,132 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Controller, useFormContext } from 'react-hook-form';
 import GoogleMap from 'google-map-react';
-import { useState } from 'react';
+import { useMemo } from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Typography from '@mui/material/Typography';
+import { closeDialog, openDialog } from 'app/store/fuse/dialogSlice';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import { useDispatch } from 'react-redux';
 
 
-let marker;
 function BasicInfoTab(props) {
+  const dispatch = useDispatch();
   const methods = useFormContext();
   const { control, formState, watch, setValue } = methods;
   const { errors } = formState;
   const name = watch('name');
-  const latitude = watch('latitude');
-  const longitude = watch('longitude');
+  const latitude = watch('diveLocation.latitude');
+  const longitude = watch('diveLocation.longitude');
+
+  const startLatitude = watch('startLocation.latitude');
+  const startLongitude = watch('startLocation.longitude');
+
+  const defaultCenter = useMemo(() => {
+    return {
+      lat: latitude,
+      lng: longitude
+    }
+  }
+    , [])
+
+  let marker, startLocationMarker;
   var loadMap = (map, maps) => {
 
-     marker =new maps.Marker({
+
+
+    marker = new maps.Marker({
       title: name,
       position: { lat: latitude, lng: longitude },
       map,
-      draggable: true
+      draggable: true,
+      icon: "assets/images/markers/blue_MarkerD.png"
     })
 
 
-    maps.event.addListener(marker, 'drag', function(event){
-      setValue("latitude", event.latLng.lat())
-      setValue("longitude", event.latLng.lng())
-  });
+    startLocationMarker = new maps.Marker({
+      title: name,
+      position: { lat: startLatitude, lng: startLongitude },
+      map,
+      draggable: true,
+      icon: "assets/images/markers/yellow_MarkerS.png"
+
+
+    })
+
+
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+
+    maps.event.addListener(marker, 'drag', function (event) {
+      setValue("diveLocation.latitude", event.latLng.lat())
+      setValue("diveLocation.longitude", event.latLng.lng())
+    });
+
+    maps.event.addListener(marker, 'dragend', function (event) {
+      map.setCenter({ lat: event.latLng.lat(), lng: event.latLng.lng() })
+    });
+
+    maps.event.addListener(startLocationMarker, 'drag', function (event) {
+      setValue("startLocation.latitude", event.latLng.lat())
+      setValue("startLocation.longitude", event.latLng.lng())
+    });
+
+    maps.event.addListener(map, "rightclick", function (event) {
+      dispatch(
+        openDialog({
+          children: (
+            <>
+              <DialogTitle id="alert-dialog-title">Wanna place a location ?</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Choose the location type to mark it on the map
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => dispatch(closeDialog())} color="primary">
+                  Close
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    setValue("startLocation.latitude", event.latLng.lat())
+                    setValue("startLocation.longitude", event.latLng.lng())
+                    startLocationMarker.setPosition({ lat: event.latLng.lat(), lng: event.latLng.lng() })
+                    dispatch(closeDialog());
+                  }}
+                  sx={{ backgroundColor: '#FFFF00' }}
+                >
+                  Start Location
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    setValue("diveLocation.latitude", event.latLng.lat())
+                    setValue("diveLocation.longitude", event.latLng.lng())
+                    marker.setPosition({ lat: event.latLng.lat(), lng: event.latLng.lng() })
+                    dispatch(closeDialog());
+                  }}
+                  sx={{ backgroundColor: '#2E2EFF' }}
+                  autoFocus
+                >
+                  Dive Location
+                </Button>
+
+              </DialogActions>
+            </>
+          ),
+        })
+      )
+    });
+
+
 
 
   };
@@ -74,88 +175,195 @@ function BasicInfoTab(props) {
       />
       <div className="flex -mx-4">
         <div className="flex-col">
-          <Controller
-            name="latitude"
-            control={control}
-            render={({ field: {value, onChange} }) => (
-              <TextField
-                value={value}
-                onChange={(e)=>{
-                  onChange(e.target.value)
-                  marker.setPosition({lat: parseFloat(e.target.value), lng: longitude})
-                  marker.map.setCenter({lat: parseFloat(e.target.value), lng: longitude})
-                }}
-                className="mt-8 mb-16"
-                error={!!errors.latitude}
-                helperText={errors?.latitude?.message}
-                label="Latitude"
-                autoFocus
-                id="latitude"
-                variant="outlined"
-                fullWidth
-                type="number"
-              />
-            )}
-          />
 
-          <Controller
-            name="longitude"
-            control={control}
-            render={({ field:{value, onChange} }) => (
-              <TextField
-              value={value}
-              onChange={(e)=>{
-                onChange(e.target.value)
-                marker.setPosition({lat: latitude, lng: parseFloat(e.target.value)})
-                marker.map.setCenter({lat: latitude, lng: parseFloat(e.target.value)})
-              }}
-                className="mt-8 mb-16"
-                error={!!errors.longitude}
-                helperText={errors?.longitude?.message}
-                label="Longitude"
-                autoFocus
-                id="longitude"
-                variant="outlined"
-                fullWidth
-                type="number"
-              />
-            )}
-          />
 
-          <Controller
-            name="depth"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                className="mt-8 mb-16"
-                error={!!errors.longitude}
-                helperText={errors?.longitude?.message}
-                label="Depth"
-                autoFocus
-                id="depth"
-                variant="outlined"
-                fullWidth
-                type="number"
+          <Accordion
+            className="border-0 shadow-0 overflow-hidden"
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              classes={{ root: 'border border-solid rounded-16 mb-16' }}
+            >
+              <Typography className="font-semibold">Dive Location</Typography>
+            </AccordionSummary>
+            <AccordionDetails className="flex flex-col md:flex-row -mx-8">
+              <Controller
+                name="diveLocation.latitude"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    value={value}
+                    onChange={(e) => {
+                      onChange(e.target.value)
+                      marker.setPosition({ lat: parseFloat(e.target.value), lng: longitude })
+                      marker.map.setCenter({ lat: parseFloat(e.target.value), lng: longitude })
+                    }}
+                    className="mt-8 mb-16 mx-2"
+                    error={!!errors.latitude}
+                    helperText={errors?.latitude?.message}
+                    label="Latitude"
+                    autoFocus
+                    id="latitude"
+                    variant="outlined"
+                    fullWidth
+                    type="number"
+                  />
+                )}
               />
-            )}
-          />
+
+              <Controller
+                name="diveLocation.longitude"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    value={value}
+                    onChange={(e) => {
+                      onChange(e.target.value)
+                      marker.setPosition({ lat: latitude, lng: parseFloat(e.target.value) })
+                      marker.map.setCenter({ lat: latitude, lng: parseFloat(e.target.value) })
+                    }}
+                    className="mt-8 mb-16"
+                    error={!!errors.longitude}
+                    helperText={errors?.longitude?.message}
+                    label="Longitude"
+                    autoFocus
+                    id="longitude"
+                    variant="outlined"
+                    fullWidth
+                    type="number"
+                  />
+                )}
+              />
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion
+            className="border-0 shadow-0 overflow-hidden"
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              classes={{ root: 'border border-solid rounded-16 mb-16' }}
+            >
+              <Typography className="font-semibold">Start Location</Typography>
+            </AccordionSummary>
+            <AccordionDetails className="flex flex-col md:flex-row -mx-8">
+              <Controller
+                name="startLocation.latitude"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    value={value}
+                    onChange={(e) => {
+                      onChange(e.target.value)
+                      startLocationMarker.setPosition({ lat: parseFloat(e.target.value), lng: startLongitude })
+                    }}
+                    className="mt-8 mb-16 mx-2"
+                    error={!!errors.startLatitude}
+                    helperText={errors?.startLatitude?.message}
+                    label="Latitude"
+                    autoFocus
+                    id="startLatitude"
+                    variant="outlined"
+                    fullWidth
+                    type="number"
+                  />
+                )}
+              />
+
+              <Controller
+                name="startLocation.longitude"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    value={value}
+                    onChange={(e) => {
+                      onChange(e.target.value)
+                      startLocationMarker.setPosition({ lat: startLatitude, lng: parseFloat(e.target.value) })
+                    }}
+                    className="mt-8 mb-16"
+                    error={!!errors.startLongitude}
+                    helperText={errors?.startLongitude?.message}
+                    label="Longitude"
+                    autoFocus
+                    id="startLongitude"
+                    variant="outlined"
+                    fullWidth
+                    type="number"
+                  />
+                )}
+              />
+            </AccordionDetails>
+          </Accordion>
+
+
+
+
+          <Accordion
+            className="border-0 shadow-0 overflow-hidden"
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              classes={{ root: 'border border-solid rounded-16 mb-16' }}
+            >
+              <Typography className="font-semibold">Depth</Typography>
+            </AccordionSummary>
+            <AccordionDetails className="flex flex-col md:flex-row -mx-8">
+              <Controller
+                name="depth.minDepth"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    className="mt-8 mb-16 mx-2"
+                    error={!!errors.longitude}
+                    helperText={errors?.longitude?.message}
+                    label="Min"
+                    autoFocus
+                    id="minDepth"
+                    variant="outlined"
+                    fullWidth
+                    type="number"
+                  />
+                )}
+              />
+
+              <Controller
+                name="depth.maxDepth"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    className="mt-8 mb-16"
+                    error={!!errors.longitude}
+                    helperText={errors?.longitude?.message}
+                    label="Max"
+                    autoFocus
+                    id="maxDepth"
+                    variant="outlined"
+                    fullWidth
+                    type="number"
+                  />
+                )}
+              />
+            </AccordionDetails>
+          </Accordion>
+
+
+
 
         </div>
 
-        <div className="w-full h-320 rounded-16 overflow-hidden mx-8">
+        <div  className="w-full h-320 rounded-16 overflow-hidden mx-8">
           <GoogleMap
             bootstrapURLKeys={{
               key: process.env.REACT_APP_MAP_KEY,
-            }} defaultCenter={[
-              latitude,
-              longitude,
-            ]}
+            }}
+            center={defaultCenter}
             defaultZoom={5}
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({ map, maps }) => loadMap(map, maps)}
           >
-            </GoogleMap>
+          </GoogleMap>
         </div>
 
       </div>
@@ -252,6 +460,7 @@ function BasicInfoTab(props) {
             freeSolo
             multiple
             options={[]}
+            getOptionLabel={(option) => option.name}
             value={value}
             onChange={(event, newValue) => {
               onChange(newValue);
