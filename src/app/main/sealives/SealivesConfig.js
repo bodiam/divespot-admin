@@ -15,7 +15,7 @@ const SealivesConfig = {
       element: <Sealives />,
     },
     {
-      path: '/sealives/:divespotId',
+      path: '/sealives/:sealifeId',
       element: <Sealife />,
     },
 

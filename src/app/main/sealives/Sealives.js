@@ -17,4 +17,4 @@ function Divespots() {
   );
 }
 
-export default withReducer('DV', reducer)(Divespots);
+export default withReducer('SL', reducer)(Divespots);

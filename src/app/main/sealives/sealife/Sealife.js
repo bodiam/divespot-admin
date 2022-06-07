@@ -15,12 +15,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
-import { getDivespot, newDivespot, resetDivespot, selectDivespot } from '../store/sealifeSlice';
+import { getSealife, newSealife, resetSealife, selectSealife } from '../store/sealifeSlice';
 import reducer from '../store';
-import DivespotHeader from './SealifeHeader';
+import SealifeHeader from './SealifeHeader';
 import BasicInfoTab from './tabs/BasicInfoTab';
 import SealifeTab from './tabs/PricingTab';
-import DivespotImagesTab from './tabs/SealifeImagesTab';
+import SealifeImagesTab from './tabs/SealifeImagesTab';
 import ReviewsTab from './tabs/ShippingTab';
 
 /**
@@ -29,17 +29,17 @@ import ReviewsTab from './tabs/ShippingTab';
 const schema = yup.object().shape({
   name: yup
     .string()
-    .required('You must enter a divespot name')
+    .required('You must enter a sealife name')
 });
 
-function Divespot(props) {
+function Sealife(props) {
   const dispatch = useDispatch();
-  const divespot = useSelector(selectDivespot);
+  const sealife = useSelector(selectSealife);
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   const routeParams = useParams();
   const [tabValue, setTabValue] = useState(0);
-  const [noDivespot, setNoDivespot] = useState(false);
+  const [noSealife, setNoSealife] = useState(false);
   const methods = useForm({
     mode: 'onChange',
     defaultValues: {},
@@ -49,49 +49,49 @@ function Divespot(props) {
   const form = watch();
 
   useDeepCompareEffect(() => {
-    function updateDivespotState() {
-      const { divespotId } = routeParams;
+    function updateSealifeState() {
+      const { sealifeId } = routeParams;
 
-      if (divespotId === 'new') {
+      if (sealifeId === 'new') {
         /**
-         * Create New Divespot data
+         * Create New Sealife data
          */
-        dispatch(newDivespot());
+        dispatch(newSealife());
       } else {
         /**
-         * Get Divespot data
+         * Get Sealife data
          */
-        dispatch(getDivespot(divespotId)).then((action) => {
+        dispatch(getSealife(sealifeId)).then((action) => {
           /**
-           * If the requested divespot is not exist show message
+           * If the requested sealife is not exist show message
            */
           if (!action.payload) {
-            setNoDivespot(true);
+            setNoSealife(true);
           }
         });
       }
     }
 
-    updateDivespotState();
+    updateSealifeState();
   }, [dispatch, routeParams]);
 
   useEffect(() => {
-    if (!divespot) {
+    if (!sealife) {
       return;
     }
     /**
-     * Reset the form on divespot state changes
+     * Reset the form on sealife state changes
      */
-    reset(divespot);
-  }, [divespot, reset]);
+    reset(sealife);
+  }, [sealife, reset]);
 
   useEffect(() => {
     return () => {
       /**
-       * Reset Divespot on component unload
+       * Reset Sealife on component unload
        */
-      dispatch(resetDivespot());
-      setNoDivespot(false);
+      dispatch(resetSealife());
+      setNoSealife(false);
     };
   }, [dispatch]);
 
@@ -103,9 +103,9 @@ function Divespot(props) {
   }
 
   /**
-   * Show Message if the requested divespots is not exists
+   * Show Message if the requested sealives is not exists
    */
-  if (noDivespot) {
+  if (noSealife) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -113,27 +113,27 @@ function Divespot(props) {
         className="flex flex-col flex-1 items-center justify-center h-full"
       >
         <Typography color="text.secondary" variant="h5">
-          There is no such divespot!
+          There is no such sealife!
         </Typography>
         <Button
           className="mt-24"
           component={Link}
           variant="outlined"
-          to="/apps/e-commerce/divespots"
+          to="/sealives"
           color="inherit"
         >
-          Go to Divespots Page
+          Go to Sealives Page
         </Button>
       </motion.div>
     );
   }
 
   /**
-   * Wait while divespot data is loading and form is setted
+   * Wait while sealife data is loading and form is setted
    */
   if (
     _.isEmpty(form) ||
-    (divespot && routeParams.divespotId !== divespot.id?.toString() && routeParams.divespotId !== 'new')
+    (sealife && routeParams.sealifeId !== sealife.id?.toString() && routeParams.sealifeId !== 'new')
   ) {
     return <FuseLoading />;
   }
@@ -141,7 +141,7 @@ function Divespot(props) {
   return (
     <FormProvider {...methods}>
       <FusePageCarded
-        header={<DivespotHeader />}
+        header={<SealifeHeader />}
         content={
           <>
             <Tabs
@@ -154,7 +154,7 @@ function Divespot(props) {
               classes={{ root: 'w-full h-64 border-b-1' }}
             >
               <Tab className="h-64" label="Basic Info" />
-              <Tab className="h-64" label="Divespot Images" disabled/>
+              <Tab className="h-64" label="Sealife Images" disabled/>
               <Tab className="h-64" label="Sea life" disabled/>
               <Tab className="h-64" label="Reviews" disabled/>
             </Tabs>
@@ -164,7 +164,7 @@ function Divespot(props) {
               </div>
 
               <div className={tabValue !== 1 ? 'hidden' : ''}>
-                <DivespotImagesTab />
+                <SealifeImagesTab />
               </div>
 
               <div className={tabValue !== 2 ? 'hidden' : ''}>
@@ -183,4 +183,4 @@ function Divespot(props) {
   );
 }
 
-export default withReducer('DV', reducer)(Divespot);
+export default withReducer('SL', reducer)(Sealife);

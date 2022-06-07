@@ -15,7 +15,7 @@ import { Box } from '@mui/system';
 import TableHead from '@mui/material/TableHead';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { lighten } from '@mui/material/styles';
-import { removeDivespots } from './store/sealivesSlice';
+import { removeSealives } from './store/sealivesSlice';
 
 const rows = [
   {
@@ -55,11 +55,11 @@ const rows = [
   },
 ];
 
-function DivespotsTableHead(props) {
-  const { selectedDivespotIds } = props;
-  const numSelected = selectedDivespotIds.length;
+function SealivesTableHead(props) {
+  const { selectedSealifeIds } = props;
+  const numSelected = selectedSealifeIds.length;
 
-  const [selectedDivespotsMenu, setSelectedDivespotsMenu] = useState(null);
+  const [selectedSealivesMenu, setSelectedSealivesMenu] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -67,12 +67,12 @@ function DivespotsTableHead(props) {
     props.onRequestSort(event, property);
   };
 
-  function openSelectedDivespotsMenu(event) {
-    setSelectedDivespotsMenu(event.currentTarget);
+  function openSelectedSealivesMenu(event) {
+    setSelectedSealivesMenu(event.currentTarget);
   }
 
-  function closeSelectedDivespotsMenu() {
-    setSelectedDivespotsMenu(null);
+  function closeSelectedSealivesMenu() {
+    setSelectedSealivesMenu(null);
   }
 
   return (
@@ -101,25 +101,25 @@ function DivespotsTableHead(props) {
               }}
             >
               <IconButton
-                aria-owns={selectedDivespotsMenu ? 'selectedDivespotsMenu' : null}
+                aria-owns={selectedSealivesMenu ? 'selectedSealivesMenu' : null}
                 aria-haspopup="true"
-                onClick={openSelectedDivespotsMenu}
+                onClick={openSelectedSealivesMenu}
                 size="large"
               >
                 <FuseSvgIcon>heroicons-outline:dots-horizontal</FuseSvgIcon>
               </IconButton>
               <Menu
-                id="selectedDivespotsMenu"
-                anchorEl={selectedDivespotsMenu}
-                open={Boolean(selectedDivespotsMenu)}
-                onClose={closeSelectedDivespotsMenu}
+                id="selectedSealivesMenu"
+                anchorEl={selectedSealivesMenu}
+                open={Boolean(selectedSealivesMenu)}
+                onClose={closeSelectedSealivesMenu}
               >
                 <MenuList>
                   <MenuItem
                     onClick={() => {
-                      dispatch(removeDivespots(selectedDivespotIds));
+                      dispatch(removeSealives(selectedSealifeIds));
                       props.onMenuItemClick();
-                      closeSelectedDivespotsMenu();
+                      closeSelectedSealivesMenu();
                     }}
                   >
                     <ListItemIcon className="min-w-40">
@@ -171,4 +171,4 @@ function DivespotsTableHead(props) {
   );
 }
 
-export default DivespotsTableHead;
+export default SealivesTableHead;

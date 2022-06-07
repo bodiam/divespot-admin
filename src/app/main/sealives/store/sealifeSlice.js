@@ -14,7 +14,7 @@ export const getSealife = createAsyncThunk('sealife/getSealife', async (sealifeI
 export const removeSealife = createAsyncThunk(
   'sealife/removeSealife',
   async (val, { dispatch, getState }) => {
-    const { id } = getState().DV.sealife;
+    const { id } = getState().SL.sealife;
     await axios.delete(`/admin/sealife/${id}`);
     return id;
   }
@@ -23,7 +23,7 @@ export const removeSealife = createAsyncThunk(
 export const saveSealife = createAsyncThunk(
   'sealife/saveSealife',
   async (sealifeData, { dispatch, getState }) => {
-    const { id } = getState().DV.sealife;
+    const { id } = getState().SL.sealife;
     var response;
   if(id){
      response = await axios.patch(`/admin/sealife/${id}`, sealifeData);
@@ -70,6 +70,6 @@ const sealifeSlice = createSlice({
 
 export const { newSealife, resetSealife } = sealifeSlice.actions;
 
-export const selectSealife = ({ DV }) => DV.sealife;
+export const selectSealife = ({ SL }) => SL.sealife;
 
 export default sealifeSlice.reducer;

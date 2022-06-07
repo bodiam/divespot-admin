@@ -6,11 +6,11 @@ import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { selectDivespotsSearchText, setDivespotsSearchText } from './store/sealivesSlice';
+import { selectSealivesSearchText, setSealivesSearchText } from './store/sealivesSlice';
 
-function DivespotsHeader(props) {
+function SealivesHeader(props) {
   const dispatch = useDispatch();
-  const searchText = useSelector(selectDivespotsSearchText);
+  const searchText = useSelector(selectSealivesSearchText);
 
   return (
     <div className="flex flex-col sm:flex-row space-y-16 sm:space-y-0 flex-1 w-full items-center justify-between py-32 px-24 md:px-32">
@@ -21,7 +21,7 @@ function DivespotsHeader(props) {
         delay={300}
         className="text-24 md:text-32 font-extrabold tracking-tight"
       >
-        Divespots
+        Sealives
       </Typography>
 
       <div className="flex flex-col w-full sm:w-auto sm:flex-row space-y-16 sm:space-y-0 flex-1 items-center justify-end space-x-8">
@@ -34,7 +34,7 @@ function DivespotsHeader(props) {
           <FuseSvgIcon color="disabled">heroicons-solid:search</FuseSvgIcon>
 
           <Input
-            placeholder="Search divespots"
+            placeholder="Search sealives"
             className="flex flex-1"
             disableUnderline
             fullWidth
@@ -42,7 +42,7 @@ function DivespotsHeader(props) {
             inputProps={{
               'aria-label': 'Search',
             }}
-            onChange={(ev) => dispatch(setDivespotsSearchText(ev))}
+            onChange={(ev) => dispatch(setSealivesSearchText(ev))}
           />
         </Paper>
         <motion.div
@@ -65,4 +65,4 @@ function DivespotsHeader(props) {
   );
 }
 
-export default DivespotsHeader;
+export default SealivesHeader;

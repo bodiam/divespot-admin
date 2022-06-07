@@ -29,7 +29,7 @@ export const removeSealives = createAsyncThunk(
 const sealivesAdapter = createEntityAdapter({});
 
 export const { selectAll: selectSealives, selectById: selectSealifeById } =
-  sealivesAdapter.getSelectors((state) => state.DV.sealives);
+  sealivesAdapter.getSelectors((state) => state.SL.sealives);
 
 const sealivesSlice = createSlice({
   name: 'sealives',
@@ -58,6 +58,6 @@ const sealivesSlice = createSlice({
 
 export const { setSealivesSearchText } = sealivesSlice.actions;
 
-export const selectSealivesSearchText = ({DV}) =>  DV.sealives.searchText;
+export const selectSealivesSearchText = ({SL}) =>  SL.sealives.searchText;
 
 export default sealivesSlice.reducer;

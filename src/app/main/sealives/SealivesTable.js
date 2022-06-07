@@ -22,8 +22,8 @@ function SealivesTable(props) {
   const dispatch = useDispatch();
   const sealives = useSelector(selectSealives);
   const searchText = useSelector(selectSealivesSearchText);
-  const totalPages = useSelector(({DV}) =>  DV.sealives.totalPages);
-  const totalElements = useSelector(({DV}) =>  DV.sealives.totalElements);
+  const totalPages = useSelector(({SL}) =>  SL.sealives.totalPages);
+  const totalElements = useSelector(({SL}) =>  SL.sealives.totalElements);
 
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState([]);

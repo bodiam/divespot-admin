@@ -119,7 +119,7 @@ function BasicInfoTab(props) {
           />
         </div>
 
-        <div className="w-full h-320 rounded-16 overflow-hidden mx-8">
+        {/*<div className="w-full h-320 rounded-16 overflow-hidden mx-8">
           <GoogleMap
             bootstrapURLKeys={{
               key: process.env.REACT_APP_MAP_KEY,
@@ -136,7 +136,7 @@ function BasicInfoTab(props) {
               lng={longitude}
             />
           </GoogleMap>
-        </div>
+          </div>*/}
 
       </div>
 
@@ -200,60 +200,6 @@ function BasicInfoTab(props) {
             id="familyName"
             variant="outlined"
             fullWidth
-          />
-        )}
-      />
-
-      <Controller
-        name="entranceType"
-        control={control}
-        defaultValue={[]}
-        render={({ field: { onChange, value } }) => (
-          <Autocomplete
-            className="mt-8 mb-16"
-            options={["SHORE_DIVE", "BOAT_DIVE"]}
-            value={value}
-            onChange={(event, newValue) => {
-              onChange(newValue);
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="Select entrance type"
-                label="Entrance Type"
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            )}
-          />
-        )}
-      />
-
-      <Controller
-        name="diveSiteType"
-        control={control}
-        defaultValue={[]}
-        render={({ field: { onChange, value } }) => (
-          <Autocomplete
-            className="mt-8 mb-16"
-            options={["WRECK_DIVE", "CAVE_DIVE", "REEF_DIVE", "ARTIFICAL_REEF", "QUARRY_DIVE", "LAKE", "MUCK", "ROCKY_REEF", "POOL", "RIVER", "RESERVOIR", "WALL"]}
-            value={value}
-            onChange={(event, newValue) => {
-              onChange(newValue);
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="Select diveSite type"
-                label="DiveSite Type"
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            )}
           />
         )}
       />
