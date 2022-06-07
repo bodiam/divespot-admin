@@ -1,25 +1,25 @@
 import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 
-const Divespot = lazy(() => import('./sealife/Sealife'));
-const Divespots = lazy(() => import('./Sealives'));
+const Sealife = lazy(() => import('./sealife/Sealife'));
+const Sealives = lazy(() => import('./Sealives'));
 
 
-const DivespotsConfig = {
+const SealivesConfig = {
   settings: {
     layout: {},
   },
   routes: [
     {
       path: '/sealives',
-      element: <Divespots />,
+      element: <Sealives />,
     },
     {
       path: '/sealives/:divespotId',
-      element: <Divespot />,
+      element: <Sealife />,
     },
 
   ],
 };
 
-export default DivespotsConfig;
+export default SealivesConfig;

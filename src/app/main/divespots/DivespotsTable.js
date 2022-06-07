@@ -181,7 +181,7 @@ function DivespotsTable(props) {
                     </TableCell>
 
 
-                    <TableCell className="p-4 md:p-16" component="th" scope="row">
+                    <TableCell className="p-4 md:p-16" component="th" scope="row" align="left">
                       {n.name}
                     </TableCell>
 

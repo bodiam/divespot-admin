@@ -4,7 +4,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 //axios.defaults.headers.common.Authorization = `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaGFzc2VuQGRpdmVzcG90LmNvbSIsImlhdCI6MTY1MzM4MDgwMSwiZXhwIjoxNjUzMzk4ODAxfQ.OJB43zUzZeO-9fa2HMsvxqHno9s3BEpX_lOUurTMIF_L72Q2Mz54_-n-mQWiu3gBsp1Pv5ehSYqV4CMBW9JHbg`;
 
 
-export const getDivespots = createAsyncThunk('divespots/getDivespots', async ({page, rowsPerPage}) => {
+export const getSealives = createAsyncThunk('sealives/getSealives', async ({page, rowsPerPage}) => {
   const response = await axios.get(`/admin/sealife?page=${page}&size=${rowsPerPage}`, {
 
   });
@@ -14,30 +14,30 @@ export const getDivespots = createAsyncThunk('divespots/getDivespots', async ({p
   return {data, totalPages, totalElements};
 });
 
-export const removeDivespots = createAsyncThunk(
-  'divespots/removeDivespots',
-  async (divespotIds, { dispatch, getState }) => {
-    //await axios.delete('/admin/sealife', { data: divespotIds });
-    const promises = divespotIds.map(async(id) => {
+export const removeSealives = createAsyncThunk(
+  'sealives/removeSealives',
+  async (sealifeIds, { dispatch, getState }) => {
+    //await axios.delete('/admin/sealife', { data: sealifeIds });
+    const promises = sealifeIds.map(async(id) => {
       await axios.delete(`/admin/sealife/${id}`);
     })
     Promise.all(promises)
-    return divespotIds;
+    return sealifeIds;
   }
 );
 
-const divespotsAdapter = createEntityAdapter({});
+const sealivesAdapter = createEntityAdapter({});
 
-export const { selectAll: selectDivespots, selectById: selectDivespotById } =
-  divespotsAdapter.getSelectors((state) => state.DV.divespots);
+export const { selectAll: selectSealives, selectById: selectSealifeById } =
+  sealivesAdapter.getSelectors((state) => state.DV.sealives);
 
-const divespotsSlice = createSlice({
-  name: 'divespots',
-  initialState: divespotsAdapter.getInitialState({
+const sealivesSlice = createSlice({
+  name: 'sealives',
+  initialState: sealivesAdapter.getInitialState({
     searchText: '',
   }),
   reducers: {
-    setDivespotsSearchText: {
+    setSealivesSearchText: {
       reducer: (state, action) => {
         state.searchText = action.payload;
       },
@@ -45,19 +45,19 @@ const divespotsSlice = createSlice({
     },
   },
   extraReducers: {
-    [getDivespots.fulfilled]: (state, action) => {
+    [getSealives.fulfilled]: (state, action) => {
       const { data, totalPages, totalElements } = action.payload;
-			divespotsAdapter.setAll(state, data);
+			sealivesAdapter.setAll(state, data);
       state.totalPages = totalPages
       state.totalElements = totalElements
     },
-    [removeDivespots.fulfilled]: (state, action) =>
-      divespotsAdapter.removeMany(state, action.payload),
+    [removeSealives.fulfilled]: (state, action) =>
+      sealivesAdapter.removeMany(state, action.payload),
   },
 });
 
-export const { setDivespotsSearchText } = divespotsSlice.actions;
+export const { setSealivesSearchText } = sealivesSlice.actions;
 
-export const selectDivespotsSearchText = ({DV}) =>  DV.divespots.searchText;
+export const selectSealivesSearchText = ({DV}) =>  DV.sealives.searchText;
 
-export default divespotsSlice.reducer;
+export default sealivesSlice.reducer;

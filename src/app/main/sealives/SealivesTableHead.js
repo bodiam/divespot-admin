@@ -19,38 +19,38 @@ import { removeDivespots } from './store/sealivesSlice';
 
 const rows = [
   {
-    id: 'name',
+    id: 'source',
     align: 'left',
     disablePadding: false,
-    label: 'Name',
+    label: 'Source',
     sort: true,
   },
   {
-    id: 'location',
+    id: 'commonNames',
     align: 'right',
     disablePadding: false,
-    label: 'Location',
+    label: 'Common Names',
     sort: true,
   },
   {
-    id: 'entranceType',
+    id: 'binomialName',
     align: 'right',
     disablePadding: false,
-    label: 'Entrance Type',
+    label: 'Binomial Name',
     sort: true,
   },
   {
-    id: 'createdBy',
+    id: 'familyName',
     align: 'right',
     disablePadding: false,
-    label: 'Created By',
+    label: 'Family Name',
     sort: true,
   },
   {
-    id: 'createdAt',
+    id: 'distribution',
     align: 'right',
     disablePadding: false,
-    label: 'Created At',
+    label: 'Distribution',
     sort: true,
   },
 ];

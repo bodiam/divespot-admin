@@ -25,18 +25,18 @@ function BasicInfoTab(props) {
   return (
     <div>
       <Controller
-        name="name"
+        name="source"
         control={control}
         render={({ field }) => (
           <TextField
             {...field}
             className="mt-8 mb-16"
-            error={!!errors.name}
             required
-            helperText={errors?.name?.message}
-            label="Name"
+            error={!!errors.source}
+            helperText={errors?.source?.message}
+            label="Source"
             autoFocus
-            id="name"
+            id="source"
             variant="outlined"
             fullWidth
           />
@@ -60,6 +60,26 @@ function BasicInfoTab(props) {
           />
         )}
       />
+
+<Controller
+        name="content"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            className="mt-8 mb-16"
+            id="content"
+            label="Content"
+            type="text"
+            multiline
+            rows={5}
+            variant="outlined"
+            fullWidth
+          />
+        )}
+      />
+
+
       <div className="flex -mx-4">
         <div className="flex-col">
           <Controller
@@ -121,13 +141,12 @@ function BasicInfoTab(props) {
       </div>
 
       <Controller
-        name="level"
+        name="commonNames"
         control={control}
-        defaultValue={[]}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
-            options={["BEGINNER", "INTERMEDIATE", "ADVANCED"]}
+            freeSolo
             value={value}
             onChange={(event, newValue) => {
               onChange(newValue);
@@ -135,14 +154,52 @@ function BasicInfoTab(props) {
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Select level"
-                label="Level"
+                placeholder="Write some common names"
+                label="Common Names"
                 variant="outlined"
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
             )}
+          />
+        )}
+      />
+
+<Controller
+        name="binomialName"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            className="mt-8 mb-16"
+            required
+            error={!!errors.binomialName}
+            helperText={errors?.binomialName?.message}
+            label="Binomial Name"
+            autoFocus
+            id="binomialName"
+            variant="outlined"
+            fullWidth
+          />
+        )}
+      />
+
+<Controller
+        name="familyName"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            className="mt-8 mb-16"
+            required
+            error={!!errors.familyName}
+            helperText={errors?.familyName?.message}
+            label="Family Name"
+            autoFocus
+            id="familyName"
+            variant="outlined"
+            fullWidth
           />
         )}
       />

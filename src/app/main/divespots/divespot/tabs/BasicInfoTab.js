@@ -176,184 +176,205 @@ function BasicInfoTab(props) {
       <div className="flex -mx-4">
         <div className="flex-col">
 
+          <Typography className="font-semibold">Dive Location</Typography>
 
-          <Accordion
-            className="border-0 shadow-0 overflow-hidden"
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              classes={{ root: 'border border-solid rounded-16 mb-16' }}
-            >
-              <Typography className="font-semibold">Dive Location</Typography>
-            </AccordionSummary>
-            <AccordionDetails className="flex flex-col md:flex-row -mx-8">
-              <Controller
-                name="diveLocation.latitude"
-                control={control}
-                render={({ field: { value, onChange } }) => (
-                  <TextField
-                    value={value}
-                    onChange={(e) => {
-                      onChange(e.target.value)
-                      marker.setPosition({ lat: parseFloat(e.target.value), lng: longitude })
-                      marker.map.setCenter({ lat: parseFloat(e.target.value), lng: longitude })
-                    }}
-                    className="mt-8 mb-16 mx-2"
-                    error={!!errors.latitude}
-                    helperText={errors?.latitude?.message}
-                    label="Latitude"
-                    autoFocus
-                    id="latitude"
-                    variant="outlined"
-                    fullWidth
-                    type="number"
-                  />
-                )}
-              />
+          <div className="flex">
 
-              <Controller
-                name="diveLocation.longitude"
-                control={control}
-                render={({ field: { value, onChange } }) => (
-                  <TextField
-                    value={value}
-                    onChange={(e) => {
-                      onChange(e.target.value)
-                      marker.setPosition({ lat: latitude, lng: parseFloat(e.target.value) })
-                      marker.map.setCenter({ lat: latitude, lng: parseFloat(e.target.value) })
-                    }}
-                    className="mt-8 mb-16"
-                    error={!!errors.longitude}
-                    helperText={errors?.longitude?.message}
-                    label="Longitude"
-                    autoFocus
-                    id="longitude"
-                    variant="outlined"
-                    fullWidth
-                    type="number"
-                  />
-                )}
-              />
-            </AccordionDetails>
-          </Accordion>
+            <Controller
+              name="diveLocation.latitude"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  value={value}
+                  onChange={(e) => {
+                    onChange(e.target.value)
+                    marker.setPosition({ lat: parseFloat(e.target.value).toFixed(6), lng: longitude })
+                    marker.map.setCenter({ lat: parseFloat(e.target.value).toFixed(6), lng: longitude })
+                  }}
+                  className="mt-8 mb-16 mx-2"
+                  error={!!errors.latitude}
+                  helperText={errors?.latitude?.message}
+                  label="Latitude"
+                  autoFocus
+                  id="latitude"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                />
+              )}
+            />
 
-          <Accordion
-            className="border-0 shadow-0 overflow-hidden"
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              classes={{ root: 'border border-solid rounded-16 mb-16' }}
-            >
-              <Typography className="font-semibold">Start Location</Typography>
-            </AccordionSummary>
-            <AccordionDetails className="flex flex-col md:flex-row -mx-8">
-              <Controller
-                name="startLocation.latitude"
-                control={control}
-                render={({ field: { value, onChange } }) => (
-                  <TextField
-                    value={value}
-                    onChange={(e) => {
-                      onChange(e.target.value)
-                      startLocationMarker.setPosition({ lat: parseFloat(e.target.value), lng: startLongitude })
-                    }}
-                    className="mt-8 mb-16 mx-2"
-                    error={!!errors.startLatitude}
-                    helperText={errors?.startLatitude?.message}
-                    label="Latitude"
-                    autoFocus
-                    id="startLatitude"
-                    variant="outlined"
-                    fullWidth
-                    type="number"
-                  />
-                )}
-              />
+            <Controller
+              name="diveLocation.longitude"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  value={value}
+                  onChange={(e) => {
+                    onChange(e.target.value)
+                    marker.setPosition({ lat: latitude, lng: parseFloat(e.target.value).toFixed(6) })
+                    marker.map.setCenter({ lat: latitude, lng: parseFloat(e.target.value).toFixed(6) })
+                  }}
+                  className="mt-8 mb-16"
+                  error={!!errors.longitude}
+                  helperText={errors?.longitude?.message}
+                  label="Longitude"
+                  autoFocus
+                  id="longitude"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                />
+              )}
+            />
+          </div>
 
-              <Controller
-                name="startLocation.longitude"
-                control={control}
-                render={({ field: { value, onChange } }) => (
-                  <TextField
-                    value={value}
-                    onChange={(e) => {
-                      onChange(e.target.value)
-                      startLocationMarker.setPosition({ lat: startLatitude, lng: parseFloat(e.target.value) })
-                    }}
-                    className="mt-8 mb-16"
-                    error={!!errors.startLongitude}
-                    helperText={errors?.startLongitude?.message}
-                    label="Longitude"
-                    autoFocus
-                    id="startLongitude"
-                    variant="outlined"
-                    fullWidth
-                    type="number"
-                  />
-                )}
-              />
-            </AccordionDetails>
-          </Accordion>
+          <Typography className="font-semibold">Start Location</Typography>
 
+          <div className="flex">
+            <Controller
+              name="startLocation.latitude"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  value={value}
+                  onChange={(e) => {
+                    onChange(e.target.value)
+                    startLocationMarker.setPosition({ lat: parseFloat(e.target.value), lng: startLongitude })
+                  }}
+                  className="mt-8 mb-16 mx-2"
+                  error={!!errors.startLatitude}
+                  helperText={errors?.startLatitude?.message}
+                  label="Latitude"
+                  autoFocus
+                  id="startLatitude"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                />
+              )}
+            />
 
+            <Controller
+              name="startLocation.longitude"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  value={value}
+                  onChange={(e) => {
+                    onChange(e.target.value)
+                    startLocationMarker.setPosition({ lat: startLatitude, lng: parseFloat(e.target.value) })
+                  }}
+                  className="mt-8 mb-16"
+                  error={!!errors.startLongitude}
+                  helperText={errors?.startLongitude?.message}
+                  label="Longitude"
+                  autoFocus
+                  id="startLongitude"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                />
+              )}
+            />
+          </div>
 
+          <Typography className="font-semibold">Depth</Typography>
 
-          <Accordion
-            className="border-0 shadow-0 overflow-hidden"
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              classes={{ root: 'border border-solid rounded-16 mb-16' }}
-            >
-              <Typography className="font-semibold">Depth</Typography>
-            </AccordionSummary>
-            <AccordionDetails className="flex flex-col md:flex-row -mx-8">
-              <Controller
-                name="depth.minDepth"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    className="mt-8 mb-16 mx-2"
-                    error={!!errors.longitude}
-                    helperText={errors?.longitude?.message}
-                    label="Min"
-                    autoFocus
-                    id="minDepth"
-                    variant="outlined"
-                    fullWidth
-                    type="number"
-                  />
-                )}
-              />
+          <div className="flex">
 
-              <Controller
-                name="depth.maxDepth"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    className="mt-8 mb-16"
-                    error={!!errors.longitude}
-                    helperText={errors?.longitude?.message}
-                    label="Max"
-                    autoFocus
-                    id="maxDepth"
-                    variant="outlined"
-                    fullWidth
-                    type="number"
-                  />
-                )}
-              />
-            </AccordionDetails>
-          </Accordion>
+            <Controller
+              name="depth.minDepth"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  className="mt-8 mb-16 mx-2"
+                  error={!!errors.longitude}
+                  helperText={errors?.longitude?.message}
+                  label="Min"
+                  autoFocus
+                  id="depth.minDepth"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                />
+              )}
+            />
 
+            <Controller
+              name="depth.maxDepth"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  className="mt-8 mb-16"
+                  error={!!errors.longitude}
+                  helperText={errors?.longitude?.message}
+                  label="Max"
+                  autoFocus
+                  id="depth.maxDepth"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                />
+              )}
+            />
+          </div>
 
+          <Typography className="font-semibold">Visibility</Typography>
+
+          <div className="flex">
+
+            <Controller
+              name="visibility.minVisibility"
+              control={control}
+              render={({ field:{value, onChange} }) => (
+                <TextField
+                  value={value ?? 0}
+                  onChange={(event) => {
+                    onChange(parseInt(event.target.value).toFixed(0));
+                  }}
+                  className="mt-8 mb-16 mx-2"
+                  error={!!errors.longitude}
+                  helperText={errors?.longitude?.message}
+                  label="Min"
+                  autoFocus
+                  id="visibility.minVisibility"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                />
+              )}
+            />
+
+            <Controller
+              name="visibility.maxVisibility"
+              control={control}
+              render={({ field:{value, onChange} }) => (
+                <TextField
+                value={value ?? 0}
+                onChange={(event) => {
+                  onChange(parseInt(event.target.value).toFixed(0));
+                }}
+                  className="mt-8 mb-16"
+                  error={!!errors.longitude}
+                  helperText={errors?.longitude?.message}
+                  label="Max"
+                  autoFocus
+                  id="visibility.maxVisibility"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                />
+              )}
+            />
+          </div>
 
 
         </div>
 
-        <div  className="w-full h-320 rounded-16 overflow-hidden mx-8">
+        <div className="w-full h-480 rounded-16 overflow-hidden mx-8">
           <GoogleMap
             bootstrapURLKeys={{
               key: process.env.REACT_APP_MAP_KEY,
@@ -449,6 +470,33 @@ function BasicInfoTab(props) {
         )}
       />
 
+<Controller
+        name="activityType"
+        control={control}
+        defaultValue={[]}
+        render={({ field: { onChange, value } }) => (
+          <Autocomplete
+            className="mt-8 mb-16"
+            options={["SWIMMING", "SNORKELING", "FREEDIVING", "SPEARFISHING", "SCUBA"]}
+            value={value}
+            onChange={(event, newValue) => {
+              onChange(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Select activity type"
+                label="Activity Type"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
+          />
+        )}
+      />
+
 
       <Controller
         name="tags"
@@ -459,12 +507,11 @@ function BasicInfoTab(props) {
             className="mt-8 mb-16"
             freeSolo
             multiple
-            options={[]}
-            getOptionLabel={(option) => option.name}
-            value={value}
+            value={value.map(x=> x.name)}
             onChange={(event, newValue) => {
-              onChange(newValue);
+              onChange(newValue.map(x=> {return {name: x}}));
             }}
+            options={[]}
             renderInput={(params) => (
               <TextField
                 {...params}

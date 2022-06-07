@@ -7,11 +7,11 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import _ from '@lodash';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { removeDivespot, saveDivespot } from '../store/sealifeSlice';
+import { removeSealife, saveSealife } from '../store/sealifeSlice';
 import dirtyValues from '../../../utils/dirtyValues'
 import { useSelector } from 'react-redux';
 
-function DivespotHeader(props) {
+function SealifeHeader(props) {
   const dispatch = useDispatch();
   const methods = useFormContext();
   const { formState, watch, getValues } = methods;
@@ -23,14 +23,16 @@ function DivespotHeader(props) {
   const navigate = useNavigate();
 	const user = useSelector(({user}) => user);
 
-  function handleSaveDivespot() {
-    dispatch(saveDivespot(dirtyValues(dirtyFields, { ...getValues(), author: user.id })));
+  function handleSaveSealife() {
+    dispatch(saveSealife(dirtyValues(dirtyFields, getValues()))).then(() => {
+      navigate('/sealives');
+    });
   }
 
 
-  function handleRemoveDivespot() {
-    dispatch(removeDivespot()).then(() => {
-      navigate('/divespots');
+  function handleRemoveSealife() {
+    dispatch(removeSealife()).then(() => {
+      navigate('/sealives');
     });
   }
 
@@ -45,7 +47,7 @@ function DivespotHeader(props) {
             className="flex items-center sm:mb-12"
             component={Link}
             role="button"
-            to="/divespots"
+            to="/sealives"
             color="inherit"
           >
             <FuseSvgIcon size={20}>
@@ -53,7 +55,7 @@ function DivespotHeader(props) {
                 ? 'heroicons-outline:arrow-sm-left'
                 : 'heroicons-outline:arrow-sm-right'}
             </FuseSvgIcon>
-            <span className="flex mx-4 font-medium">Divespots</span>
+            <span className="flex mx-4 font-medium">Sealives</span>
           </Typography>
         </motion.div>
 
@@ -77,10 +79,10 @@ function DivespotHeader(props) {
             animate={{ x: 0, transition: { delay: 0.3 } }}
           >
             <Typography className="text-16 sm:text-20 truncate font-semibold">
-              {name || 'New Divespot'}
+              {name || 'New Sealife'}
             </Typography>
             <Typography variant="caption" className="font-medium">
-              Divespot Detail
+              Sealife Detail
             </Typography>
           </motion.div>
         </div>
@@ -94,7 +96,7 @@ function DivespotHeader(props) {
           className="whitespace-nowrap mx-4"
           variant="contained"
           color="secondary"
-          onClick={handleRemoveDivespot}
+          onClick={handleRemoveSealife}
           startIcon={<FuseSvgIcon className="hidden sm:flex">heroicons-outline:trash</FuseSvgIcon>}
         >
           Remove
@@ -104,7 +106,7 @@ function DivespotHeader(props) {
           variant="contained"
           color="secondary"
           disabled={_.isEmpty(dirtyFields) || !isValid}
-          onClick={handleSaveDivespot}
+          onClick={handleSaveSealife}
         >
           Save
         </Button>
@@ -113,4 +115,4 @@ function DivespotHeader(props) {
   );
 }
 
-export default DivespotHeader;
+export default SealifeHeader;

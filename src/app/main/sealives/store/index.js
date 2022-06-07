@@ -1,11 +1,11 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
-import divespot from './sealifeSlice';
-import divespots from './sealivesSlice';
+import sealife from './sealifeSlice';
+import sealives from './sealivesSlice';
 
 const reducer = combineReducers({
-  divespot,
-  divespots,
+  sealife,
+  sealives,
 });
 
 export default reducer;

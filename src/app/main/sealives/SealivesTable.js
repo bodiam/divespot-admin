@@ -15,19 +15,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import withRouter from '@fuse/core/withRouter';
 import FuseLoading from '@fuse/core/FuseLoading';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { getDivespots, selectDivespots, selectDivespotsSearchText } from './store/sealivesSlice';
-import DivespotsTableHead from './SealivesTableHead';
+import { getSealives, selectSealives, selectSealivesSearchText } from './store/sealivesSlice';
+import SealivesTableHead from './SealivesTableHead';
 
-function DivespotsTable(props) {
+function SealivesTable(props) {
   const dispatch = useDispatch();
-  const divespots = useSelector(selectDivespots);
-  const searchText = useSelector(selectDivespotsSearchText);
-  const totalPages = useSelector(({DV}) =>  DV.divespots.totalPages);
-  const totalElements = useSelector(({DV}) =>  DV.divespots.totalElements);
+  const sealives = useSelector(selectSealives);
+  const searchText = useSelector(selectSealivesSearchText);
+  const totalPages = useSelector(({DV}) =>  DV.sealives.totalPages);
+  const totalElements = useSelector(({DV}) =>  DV.sealives.totalElements);
 
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState([]);
-  const [data, setData] = useState(divespots);
+  const [data, setData] = useState(sealives);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [order, setOrder] = useState({
@@ -37,19 +37,19 @@ function DivespotsTable(props) {
 
   useEffect(() => {
     setLoading(true)
-    dispatch(getDivespots({page, rowsPerPage})).then(() => setLoading(false));
+    dispatch(getSealives({page, rowsPerPage})).then(() => setLoading(false));
   }, [dispatch, page, rowsPerPage]);
 
   useEffect(() => {
     if (searchText.length !== 0) {
       setData(
-        _.filter(divespots, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
+        _.filter(sealives, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
       );
       setPage(0);
     } else {
-      setData(divespots);
+      setData(sealives);
     }
-  }, [divespots, searchText]);
+  }, [sealives, searchText]);
 
   function handleRequestSort(event, property) {
     const id = property;
@@ -78,7 +78,7 @@ function DivespotsTable(props) {
   }
 
   function handleClick(item) {
-    props.navigate(`/divespots/${item.id}`);
+    props.navigate(`/sealives/${item.id}`);
   }
 
   function handleCheck(event, id) {
@@ -125,7 +125,7 @@ function DivespotsTable(props) {
         className="flex flex-1 items-center justify-center h-full"
       >
         <Typography color="text.secondary" variant="h5">
-          There are no divespots!
+          There are no sealives!
         </Typography>
       </motion.div>
     );
@@ -135,8 +135,8 @@ function DivespotsTable(props) {
     <div className="w-full flex flex-col min-h-full">
       <FuseScrollbars className="grow overflow-x-auto">
         <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
-          <DivespotsTableHead
-            selectedDivespotIds={selected}
+          <SealivesTableHead
+            selectedSealifeIds={selected}
             order={order}
             onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
@@ -181,24 +181,24 @@ function DivespotsTable(props) {
                     </TableCell>
 
 
-                    <TableCell className="p-4 md:p-16" component="th" scope="row">
-                      {n.name}
+                    <TableCell className="p-4 md:p-16" component="th" scope="row" align="left">
+                      {n.source}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.location}
+                      {n.commonNames.join(", ")}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.entranceType}
+                      {n.binomialName}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.createdBy}
+                      {n.familyName}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.createdAt}
+                      {n.distribution}
                     </TableCell>
 
                   </TableRow>
@@ -221,6 +221,8 @@ function DivespotsTable(props) {
         nextIconButtonProps={{
           'aria-label': 'Next Page',
         }}
+        showLastButton
+        showFirstButton
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
@@ -228,4 +230,4 @@ function DivespotsTable(props) {
   );
 }
 
-export default withRouter(DivespotsTable);
+export default withRouter(SealivesTable);
