@@ -28,11 +28,18 @@ export const saveDivespot = createAsyncThunk(
   'divespot/saveDivespot',
   async (divespotData, { dispatch, getState }) => {
     const { id } = getState().DV.divespot;
-    var response;
+    var response, upload
+   var links = []
+   const promises = divespotData?.uploadedImages?.map(async (uImage) => {
+    upload  = await axios.post(`/admin/image/base64`, {name: "", data: uImage.replace(/data:.+?,/, "")})
+    links.push(process.env.REACT_APP_API_URL + upload.data.location)
+  })
+  await Promise.all(promises)
+
   if(id){
-     response = await axios.patch(`/admin/divespot/${id}`, divespotData);
+     response = await axios.patch(`/admin/divespot/${id}`, { images: [ ...divespotData.images, ...links] });
   }else{
-    response = await axios.post(`/admin/divespot`, divespotData);
+    response = await axios.post(`/admin/divespot`, {...divespotData, images: [ ...divespotData.images, ...links] });
   }
 
     const data = await response.data;
@@ -81,7 +88,8 @@ const divespotSlice = createSlice({
             amount: 0,
             code: ''
           },
-          dateCreated: new Date().toISOString()
+          dateCreated: new Date().toISOString(),
+          uploadedImages: []
         },
       }),
     },

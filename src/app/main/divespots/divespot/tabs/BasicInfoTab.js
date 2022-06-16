@@ -115,7 +115,7 @@ function BasicInfoTab(props) {
                     dispatch(closeDialog());
                   }}
                   sx={{ backgroundColor: '#2E2EFF' }}
-                  autoFocus
+                  
                 >
                   Dive Location
                 </Button>
@@ -195,7 +195,7 @@ function BasicInfoTab(props) {
                   error={!!errors.latitude}
                   helperText={errors?.latitude?.message}
                   label="Latitude"
-                  autoFocus
+                  
                   id="latitude"
                   variant="outlined"
                   fullWidth
@@ -219,7 +219,7 @@ function BasicInfoTab(props) {
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Longitude"
-                  autoFocus
+                  
                   id="longitude"
                   variant="outlined"
                   fullWidth
@@ -246,7 +246,7 @@ function BasicInfoTab(props) {
                   error={!!errors.startLatitude}
                   helperText={errors?.startLatitude?.message}
                   label="Latitude"
-                  autoFocus
+                  
                   id="startLatitude"
                   variant="outlined"
                   fullWidth
@@ -269,7 +269,7 @@ function BasicInfoTab(props) {
                   error={!!errors.startLongitude}
                   helperText={errors?.startLongitude?.message}
                   label="Longitude"
-                  autoFocus
+                  
                   id="startLongitude"
                   variant="outlined"
                   fullWidth
@@ -293,7 +293,7 @@ function BasicInfoTab(props) {
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Min"
-                  autoFocus
+                  
                   id="depth.minDepth"
                   variant="outlined"
                   fullWidth
@@ -312,7 +312,7 @@ function BasicInfoTab(props) {
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Max"
-                  autoFocus
+                  
                   id="depth.maxDepth"
                   variant="outlined"
                   fullWidth
@@ -339,7 +339,7 @@ function BasicInfoTab(props) {
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Min"
-                  autoFocus
+                  
                   id="visibility.minVisibility"
                   variant="outlined"
                   fullWidth
@@ -361,7 +361,7 @@ function BasicInfoTab(props) {
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Max"
-                  autoFocus
+                  
                   id="visibility.maxVisibility"
                   variant="outlined"
                   fullWidth
@@ -477,6 +477,7 @@ function BasicInfoTab(props) {
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
+            multiple
             options={["SWIMMING", "SNORKELING", "FREEDIVING", "SPEARFISHING", "SCUBA"]}
             value={value}
             onChange={(event, newValue) => {

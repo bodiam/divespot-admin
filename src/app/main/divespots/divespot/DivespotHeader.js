@@ -35,7 +35,7 @@ console.log(user)
         ...getValues(),
         author: user.username,
       }
-    )).then(() => {
+    )).then((e) => {
       navigate('/divespots');
     });
   }

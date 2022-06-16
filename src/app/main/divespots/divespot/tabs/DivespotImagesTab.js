@@ -45,15 +45,24 @@ const Root = styled('div')(({ theme }) => ({
 
 function DivespotImagesTab(props) {
   const methods = useFormContext();
-  const { control, watch } = methods;
+  const { control, watch, setValue, getValues } = methods;
 
   const images = watch('images');
+  const uploadedImages = watch('uploadedImages');
+
+
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 
   return (
     <Root>
       <div className="flex justify-center sm:justify-start flex-wrap -mx-16">
         <Controller
-          name="images"
+          name="uploadedImages"
           control={control}
           render={({ field: { onChange, value } }) => (
             <Box
@@ -73,31 +82,8 @@ function DivespotImagesTab(props) {
                 id="button-file"
                 type="file"
                 onChange={async (e) => {
-                  function readFileAsync() {
-                    return new Promise((resolve, reject) => {
-                      const file = e.target.files[0];
-                      if (!file) {
-                        return;
-                      }
-                      const reader = new FileReader();
-
-                      reader.onload = () => {
-                        resolve({
-                          id: FuseUtils.generateGUID(),
-                          url: `data:${file.type};base64,${btoa(reader.result)}`,
-                          type: 'image',
-                        });
-                      };
-
-                      reader.onerror = reject;
-
-                      reader.readAsBinaryString(file);
-                    });
-                  }
-
-                  const newImage = await readFileAsync();
-
-                  onChange([newImage, ...value]);
+                  const newImage = await toBase64(e.target.files[0])
+                  setValue("uploadedImages", (uploadedImages ? [newImage, ...uploadedImages] : [newImage]))
                 }}
               />
               <FuseSvgIcon size={32} color="action">
@@ -107,20 +93,39 @@ function DivespotImagesTab(props) {
           )}
         />
 
-        {images?.map((media) => (
+        {uploadedImages?.map((image, key) => (
           <div
-            onClick={() => onChange(media.id)}
-            onKeyDown={() => onChange(media.id)}
+          onClick={() => setValue("uploadedImages", uploadedImages.filter(function(value, index){ 
+            return index != key
+        }))}
             role="button"
             tabIndex={0}
             className={clsx(
-              'divespotImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg',
-              media.id === value && 'featured'
+              'divespotImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg'
             )}
-            key={media.id}
+            key={'uploaded' + key}
           >
-            <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:star</FuseSvgIcon>
-            <img className="max-w-none w-auto h-full" src={media.url} alt="divespot" />
+            <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:download</FuseSvgIcon>
+            <img className="max-w-none w-auto h-full" src={image} alt="divespot" />
+           
+            </div>
+            
+        ))}
+
+        {images?.map((image, key) => (
+          <div
+            onClick={() => setValue("images", images.filter(function(value, index){ 
+              return index != key
+          }))}
+            role="button"
+            tabIndex={0}
+            className={clsx(
+              'divespotImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg'
+            )}
+            key={'image' + key}
+          >
+            <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:check</FuseSvgIcon>
+            <img className="max-w-none w-auto h-full" src={image} alt="divespot" />
           </div>
         ))}
 
