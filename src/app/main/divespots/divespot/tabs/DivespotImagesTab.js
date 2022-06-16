@@ -105,7 +105,7 @@ function DivespotImagesTab(props) {
             )}
             key={'uploaded' + key}
           >
-            <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:download</FuseSvgIcon>
+            <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:upload</FuseSvgIcon>
             <img className="max-w-none w-auto h-full" src={image} alt="divespot" />
            
             </div>
