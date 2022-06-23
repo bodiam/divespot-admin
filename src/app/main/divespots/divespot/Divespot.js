@@ -22,7 +22,6 @@ import BasicInfoTab from './tabs/BasicInfoTab';
 import SealifeTab from './tabs/SealifeTab';
 import DivespotImagesTab from './tabs/DivespotImagesTab';
 import ReviewsTab from './tabs/ReviewsTab';
-import PricingTab from './tabs/PricingTab';
 
 /**
  * Form Validation Schema
@@ -158,7 +157,6 @@ function Divespot(props) {
               <Tab className="h-64" label="Divespot Images"/>
               <Tab className="h-64" label="Sea life" />
               <Tab className="h-64" label="Reviews" />
-              <Tab className="h-64" label="Pricing" />
 
             </Tabs>
             {/* deleted className max-w-3xl */}
@@ -181,9 +179,6 @@ function Divespot(props) {
                 <ReviewsTab />
               </div>
 
-              <div className={tabValue !== 4 ? 'hidden' : ''}>
-                <PricingTab />
-              </div>
             </div>
           </>
         }

@@ -15,7 +15,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { useDispatch } from 'react-redux';
-
+import codes from "./codes"
+import InputAdornment from '@mui/material/InputAdornment';
 
 function BasicInfoTab(props) {
   const dispatch = useDispatch();
@@ -528,6 +529,60 @@ function BasicInfoTab(props) {
         )}
       />
 
+
+<div className='flex'>
+      <Controller
+        name="price.amount"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            className="mt-8 mb-16 mx-2"
+            label="Amount"
+            placeholder="Select Amount"
+            id="amount"
+            type="number"
+            variant="outlined"
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        )}
+      />
+
+<Controller
+        name="price.code"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <Autocomplete
+            className="mt-8 mb-16 mx-2"
+            freeSolo
+            options={codes}
+            value={value}
+            onChange={(event, newValue) => {
+              onChange(newValue);
+            }}
+            fullWidth
+
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Select Currency Code"
+                label="Code"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )}
+
+          />
+        )}
+      />
+
+
+    </div>
 
 
 

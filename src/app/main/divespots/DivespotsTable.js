@@ -22,12 +22,11 @@ function DivespotsTable(props) {
   const dispatch = useDispatch();
   const divespots = useSelector(selectDivespots);
   const searchText = useSelector(selectDivespotsSearchText);
-  const totalPages = useSelector(({DV}) =>  DV.divespots.totalPages);
-  const totalElements = useSelector(({DV}) =>  DV.divespots.totalElements);
+  const totalPages = useSelector(({ DV }) => DV.divespots.totalPages);
+  const totalElements = useSelector(({ DV }) => DV.divespots.totalElements);
 
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState([]);
-  const [data, setData] = useState(divespots);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [order, setOrder] = useState({
@@ -37,19 +36,11 @@ function DivespotsTable(props) {
 
   useEffect(() => {
     setLoading(true)
-    dispatch(getDivespots({page, rowsPerPage})).then(() => setLoading(false));
-  }, [dispatch, page, rowsPerPage]);
+    dispatch(getDivespots({ page, rowsPerPage, searchText })).then(() => {
+      setLoading(false)
+    })
+  }, [dispatch, page, rowsPerPage, searchText]);
 
-  useEffect(() => {
-    if (searchText.length !== 0) {
-      setData(
-        _.filter(divespots, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
-      );
-      setPage(0);
-    } else {
-      setData(divespots);
-    }
-  }, [divespots, searchText]);
 
   function handleRequestSort(event, property) {
     const id = property;
@@ -67,7 +58,7 @@ function DivespotsTable(props) {
 
   function handleSelectAllClick(event) {
     if (event.target.checked) {
-      setSelected(data.map((n) => n.id));
+      setSelected(divespots.map((n) => n.id));
       return;
     }
     setSelected([]);
@@ -117,7 +108,7 @@ function DivespotsTable(props) {
     );
   }
 
-  if (data.length === 0) {
+  if (divespots.length === 0) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -140,13 +131,13 @@ function DivespotsTable(props) {
             order={order}
             onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
-            rowCount={data.length}
+            rowCount={divespots.length}
             onMenuItemClick={handleDeselect}
           />
 
           <TableBody>
             {_.orderBy(
-              data,
+              divespots,
               [
                 (o) => {
                   switch (order.id) {
@@ -186,7 +177,7 @@ function DivespotsTable(props) {
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {`${parseFloat(n.diveLocation.latitude).toFixed(6)}, ${parseFloat(n.diveLocation.longitude).toFixed(6)}`}
+                      {`${parseFloat(n.diveLocation?.latitude?? 0).toFixed(6)}, ${parseFloat(n.diveLocation?.longitude?? 0).toFixed(6)}`}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
@@ -198,7 +189,7 @@ function DivespotsTable(props) {
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.dateCreated? new Date(n.dateCreated).toLocaleString(): 'N/A'}
+                      {n.dateCreated ? new Date(n.dateCreated).toLocaleString() : 'N/A'}
                     </TableCell>
 
                   </TableRow>
@@ -213,7 +204,7 @@ function DivespotsTable(props) {
         component="div"
         count={totalElements}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5,20,50,100,200]}
+        rowsPerPageOptions={[5, 20, 50, 100, 200]}
         page={page}
         backIconButtonProps={{
           'aria-label': 'Previous Page',
