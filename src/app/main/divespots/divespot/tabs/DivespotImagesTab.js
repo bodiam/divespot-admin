@@ -83,7 +83,7 @@ function DivespotImagesTab(props) {
                 type="file"
                 onChange={async (e) => {
                   const newImage = await toBase64(e.target.files[0])
-                  setValue("uploadedImages", (uploadedImages ? [newImage, ...uploadedImages] : [newImage]))
+                  setValue("uploadedImages", (uploadedImages ? [newImage, ...uploadedImages] : [newImage]), { shouldDirty: true })
                 }}
               />
               <FuseSvgIcon size={32} color="action">
@@ -97,7 +97,7 @@ function DivespotImagesTab(props) {
           <div
           onClick={() => setValue("uploadedImages", uploadedImages.filter(function(value, index){ 
             return index != key
-        }))}
+        }), { shouldDirty: true })}
             role="button"
             tabIndex={0}
             className={clsx(
@@ -116,7 +116,7 @@ function DivespotImagesTab(props) {
           <div
             onClick={() => setValue("images", images.filter(function(value, index){ 
               return index != key
-          }))}
+          }), { shouldDirty: true })}
             role="button"
             tabIndex={0}
             className={clsx(

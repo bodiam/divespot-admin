@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import FuseUtils from '@fuse/utils';
+import { showMessage } from 'app/store/fuse/messageSlice';
+import history from '@history';
+
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 //axios.defaults.headers.common.Authorization = `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaGFzc2VuQGRpdmVzcG90LmNvbSIsImlhdCI6MTY1MzM4MDgwMSwiZXhwIjoxNjUzMzk4ODAxfQ.OJB43zUzZeO-9fa2HMsvxqHno9s3BEpX_lOUurTMIF_L72Q2Mz54_-n-mQWiu3gBsp1Pv5ehSYqV4CMBW9JHbg`;
 
@@ -27,24 +30,37 @@ export const removeDivespot = createAsyncThunk(
 export const saveDivespot = createAsyncThunk(
   'divespot/saveDivespot',
   async (divespotData, { dispatch, getState }) => {
-    const { id } = getState().DV.divespot;
-    var response, upload
-   var links = []
-   const promises = divespotData?.uploadedImages?.map(async (uImage) => {
-    upload  = await axios.post(`/admin/image/base64`, {name: "", data: uImage.replace(/data:.+?,/, "")})
-    links.push(process.env.REACT_APP_API_URL + upload.data.location)
-  })
-  await Promise.all(promises)
 
-  if(id){
-     response = await axios.patch(`/admin/divespot/${id}`, { images: [ ...divespotData.images, ...links] });
-  }else{
-    response = await axios.post(`/admin/divespot`, {...divespotData, images: [ ...divespotData.images, ...links] });
-  }
-
-    const data = await response.data;
-
-    return data;
+    try {
+      const { id } = getState().DV.divespot;
+      var  upload
+     var links = []
+     const promises = divespotData?.uploadedImages?.map(async (uImage) => {
+      upload  = await axios.post(`/admin/image/base64`, {name: "", data: uImage.replace(/data:.+?,/, "")})
+      links.push(process.env.REACT_APP_API_URL + upload.data.location)
+    })
+    if(promises) {
+      await Promise.all(promises)
+    }
+  
+  
+    if(id){
+        await axios.patch(`/admin/divespot/${id}`, {...divespotData, 
+          ...(divespotData.images && {images: [ ...divespotData.images, ...links] })
+           }
+           );
+    }else{
+       await axios.post(`/admin/divespot`, {...divespotData,
+         images: [ ...divespotData.images, ...links] });
+    }
+    dispatch(showMessage({message: "Saved successfuly!", variant: 'success', autoHideDuration: 3000}));
+    } catch (error) {
+      dispatch(showMessage({message: error.message, variant: 'error', autoHideDuration: 3000}));
+    }
+    history.push({
+      pathname: '/divespots',
+    });
+  
   }
 );
 
@@ -89,7 +105,8 @@ const divespotSlice = createSlice({
             code: ''
           },
           dateCreated: new Date().toISOString(),
-          uploadedImages: []
+          uploadedImages: [],
+          images: []
         },
       }),
     },

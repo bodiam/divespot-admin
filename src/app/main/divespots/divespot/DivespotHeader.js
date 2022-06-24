@@ -31,13 +31,10 @@ console.log(user)
   function handleSaveDivespot() {
     dispatch(saveDivespot(
       {
-        //...dirtyValues(dirtyFields, getValues()),
-        ...getValues(),
+        ...dirtyValues(dirtyFields, getValues()),
         author: user.username,
       }
-    )).then((e) => {
-      navigate('/divespots');
-    });
+    ))
   }
 
 
