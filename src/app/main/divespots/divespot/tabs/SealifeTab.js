@@ -18,8 +18,10 @@ function SealifeTab(props) {
   const methods = useFormContext();
   const { control, watch } = methods;
   const divespot = useSelector(selectDivespot);
-  const sealives = watch("sealives")
   const [searchText, setSearchText] = useState('')
+  const [sealives, setSealives] = useState([])
+  const [selectedSealives, setSelectedSealives] = useState([])
+  const [combinedSealives, setCombinedSealives] = useState([])
 
   useEffect(() => {
 
@@ -38,7 +40,17 @@ function SealifeTab(props) {
 
 
   const handleLinkSealife = () => {
+    setSelectedSealives(sealives)
+    if(divespot.sealife && divespot.sealife.length > 0 )
+    setCombinedSealives( [...divespot.sealife ,...selectedSealives, ...sealives])
+    else 
+    setCombinedSealives([...selectedSealives, ...sealives])
 
+    setSealives([])
+  }
+
+  const handleRemoveSealife = (id) => {
+  setCombinedSealives(combinedState=> combinedState.filter(c=> c.id != id))
   }
 
   return (
@@ -46,44 +58,38 @@ function SealifeTab(props) {
 
       <div className='flex'>
 
-        <Controller
-          name="sealives"
-          control={control}
-          defaultValue={[]}
-          render={({ field: { onChange, value } }) => (
-            <Autocomplete
-              onChange={(event, newValue) => {
-                onChange(newValue);
-              }}
-              freeSolo
-              multiple
-              fullWidth
-              options={sealivesOptions}
-              getOptionLabel={(s) => s && s.binomialName}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Select Sealives"
-                  label="Sealives"
-                  variant="outlined"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onInput={(e) => {
-                    setSearchText(e.target.value)
-                  }}
-                />
-              )}
-            />
 
+        <Autocomplete
+        value={sealives}
+          onChange={(event, newValue) => {
+            setSealives(newValue);
+          }}
+          freeSolo
+          multiple
+          fullWidth
+          options={sealivesOptions}
+          getOptionLabel={(s) => s && s.binomialName}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Select Sealives"
+              label="Sealives"
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onInput={(e) => {
+                setSearchText(e.target.value)
+              }}
+            />
           )}
         />
 
-<Button
+        <Button
           className="whitespace-nowrap mx-4"
           variant="contained"
           color="secondary"
-          disabled={!sealives}
+          disabled={sealives.length == 0}
           onClick={handleLinkSealife}
         >
           Add
@@ -102,7 +108,7 @@ function SealifeTab(props) {
                 <Typography className="font-semibold">Image</Typography>
               </th>
               <th>
-                <Typography className="font-semibold">Name</Typography>
+                <Typography className="font-semibold">Binomial Name</Typography>
               </th>
               <th>
                 <Typography className="font-semibold">Family Name</Typography>
@@ -110,36 +116,53 @@ function SealifeTab(props) {
               <th>
                 <Typography className="font-semibold">Distribution</Typography>
               </th>
+
+              <th>
+                <Typography className="font-semibold">Action</Typography>
+              </th>
             </tr>
           </thead>
           <tbody>
-            {divespot.sealife?.map((s) => (
-              <tr key={s.id}>
-                <td className="w-64">{s.id}</td>
-                <td className="w-80">
-                  <img className="product-image" src={s.images[0]} alt="product" />
-                </td>
-                <td>
-                  <Typography
-                    component={Link}
-                    to={`/sealives/${s.id}`}
-                    className="truncate"
-                    style={{
-                      color: 'inherit',
-                      textDecoration: 'underline',
-                    }}
-                  >
-                    {s.commonName}
-                  </Typography>
-                </td>
-                <td className="w-64 text-right">
-                  <span className="truncate">${s.familyName}</span>
-                </td>
-                <td className="w-64 text-right">
-                  <span className="truncate">{s.distribution}</span>
-                </td>
-              </tr>
+
+            {combinedSealives.map((s) => (
+            <tr key={s.id}>
+              <td className="w-64">{s.id}</td>
+              <td className="w-80">
+                <img className="product-image" src={s.images[0]} alt="product" />
+              </td>
+              <td className="w-64 ">
+                <Typography
+                  component={Link}
+                  to={`/sealives/${s.id}`}
+                  className="truncate"
+                  style={{
+                    color: 'inherit',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  {s.binomialName}
+                </Typography>
+              </td>
+              <td className="w-64 ">
+                <span className="truncate">{s.familyName}</span>
+              </td>
+              <td className="w-64 ">
+                <span className="truncate">{s.distribution}</span>
+              </td>
+
+              <td className="w-64 text-right">
+              <Button
+          className="whitespace-nowrap mx-4"
+          variant="contained"
+          color="primary"
+          onClick={() => handleRemoveSealife(s.id)}
+        >
+          Remove
+        </Button>
+              </td>
+            </tr>
             ))}
+
           </tbody>
         </table>
       </div>
