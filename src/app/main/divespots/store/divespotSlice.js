@@ -33,34 +33,37 @@ export const saveDivespot = createAsyncThunk(
 
     try {
       const { id } = getState().DV.divespot;
-      var  upload
-     var links = []
-     const promises = divespotData?.uploadedImages?.map(async (uImage) => {
-      upload  = await axios.post(`/admin/image/base64`, {name: "", data: uImage.replace(/data:.+?,/, "")})
-      links.push(process.env.REACT_APP_API_URL + upload.data.location)
-    })
-    if(promises) {
-      await Promise.all(promises)
-    }
-  
-  
-    if(id){
-        await axios.patch(`/admin/divespot/${id}`, {...divespotData, 
-          ...(divespotData.images && {images: [ ...divespotData.images, ...links] })
-           }
-           );
-    }else{
-       await axios.post(`/admin/divespot`, {...divespotData,
-         images: [ ...divespotData.images, ...links] });
-    }
-    dispatch(showMessage({message: "Saved successfuly!", variant: 'success', autoHideDuration: 3000}));
+      var upload
+      var links = []
+      const promises = divespotData?.uploadedImages?.map(async (uImage) => {
+        upload = await axios.post(`/admin/image/base64`, { name: "", data: uImage.replace(/data:.+?,/, "") })
+        links.push(process.env.REACT_APP_API_URL + upload.data.location)
+      })
+      if (promises) {
+        await Promise.all(promises)
+      }
+
+
+      if (id) {
+        await axios.patch(`/admin/divespot/${id}`, {
+          ...divespotData,
+          ...(divespotData.images && { images: [...divespotData.images, ...links] })
+        }
+        );
+      } else {
+        await axios.post(`/admin/divespot`, {
+          ...divespotData,
+          images: [...divespotData.images, ...links]
+        });
+      }
+      dispatch(showMessage({ message: "Saved successfuly!", variant: 'success', autoHideDuration: 3000 }));
     } catch (error) {
-      dispatch(showMessage({message: error.message, variant: 'error', autoHideDuration: 3000}));
+      dispatch(showMessage({ message: error.message, variant: 'error', autoHideDuration: 3000 }));
     }
     history.push({
       pathname: '/divespots',
     });
-  
+
   }
 );
 
@@ -100,7 +103,7 @@ const divespotSlice = createSlice({
           tags: [],
           sealife: [],
           reviews: [],
-          price: {          
+          price: {
             amount: 0,
             code: ''
           },

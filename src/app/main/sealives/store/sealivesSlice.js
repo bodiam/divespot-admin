@@ -5,9 +5,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 
 export const getSealives = createAsyncThunk('sealives/getSealives', async ({page, rowsPerPage}) => {
-  const response = await axios.get(`/admin/sealife?page=${page}&size=${rowsPerPage}`, {
-
-  });
+  const response = await axios.get(`/admin/sealife?sort=binomialName${page != undefined && rowsPerPage != undefined ? `&page=${page}&size=${rowsPerPage}` : ``} `);
   const data = await response.data.content;
   const totalPages = await response.data.page.totalPages;
   const totalElements = await response.data.page.totalElements;
@@ -29,7 +27,12 @@ export const removeSealives = createAsyncThunk(
 const sealivesAdapter = createEntityAdapter({});
 
 export const { selectAll: selectSealives, selectById: selectSealifeById } =
-  sealivesAdapter.getSelectors((state) => state.SL.sealives);
+  sealivesAdapter.getSelectors((state) => {
+    if(state.SL)
+   return   state.SL.sealives 
+   else
+    return {ids : []}
+  } );
 
 const sealivesSlice = createSlice({
   name: 'sealives',
