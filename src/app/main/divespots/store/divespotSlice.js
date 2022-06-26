@@ -13,7 +13,8 @@ export const getDivespot = createAsyncThunk('divespot/getDivespot', async (dives
 
 
   const sealife = await axios.get(`/admin/divespot/${divespotId}/sealife`);
-  data.sealife = await sealife.data?.content?.value
+  if(sealife && sealife.data && sealife.data.content && !sealife.data.content[0].value  )
+  data.sealife = await sealife.data?.content
 
   return data === undefined ? null : data;
 });
@@ -48,8 +49,23 @@ export const saveDivespot = createAsyncThunk(
         await axios.patch(`/admin/divespot/${id}`, {
           ...divespotData,
           ...(divespotData.images && { images: [...divespotData.images, ...links] })
+        })
+        if(divespotData.combinedSealives ) {
+          var uriList = ''
+           divespotData.combinedSealives.map((c) => {
+   uriList = uriList + process.env.REACT_APP_API_URL + '/admin/sealife/' + c.id + '\n'
+})
+
+          await axios.put(`/admin/divespot/${id}/sealife`, uriList, 
+          {
+            headers: {
+                'Content-Type': 'text/uri-list'
+            }
         }
-        );
+         )
+    
+
+        }
       } else {
         await axios.post(`/admin/divespot`, {
           ...divespotData,
@@ -109,7 +125,8 @@ const divespotSlice = createSlice({
           },
           dateCreated: new Date().toISOString(),
           uploadedImages: [],
-          images: []
+          images: [],
+          combinedSealives: []
         },
       }),
     },

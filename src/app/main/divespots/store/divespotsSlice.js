@@ -12,7 +12,7 @@ export const getDivespots = createAsyncThunk('divespots/getDivespots', async ({p
     const searchTotalElements = await searchResponse.data.length;
     return {data: searchData,  totalElements: searchTotalElements}; 
   }else{
-    const response = await axios.get(`/admin/divespot?page=${page}&size=${rowsPerPage}`, {
+    const response = await axios.get(`/admin/divespot?sort=name&page=${page}&size=${rowsPerPage}`, {
 
     });
     const data = await response.data.content;

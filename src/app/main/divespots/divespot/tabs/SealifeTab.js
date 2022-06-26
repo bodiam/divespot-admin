@@ -16,12 +16,18 @@ function SealifeTab(props) {
   const dispatch = useDispatch()
   const [sealivesOptions, setSealivesOptions] = useState([])
   const methods = useFormContext();
-  const { control, watch } = methods;
+  const { control, watch, setValue } = methods;
   const divespot = useSelector(selectDivespot);
   const [searchText, setSearchText] = useState('')
   const [sealives, setSealives] = useState([])
   const [selectedSealives, setSelectedSealives] = useState([])
-  const [combinedSealives, setCombinedSealives] = useState([])
+  const combinedSealives = watch("combinedSealives")
+
+
+  
+  useEffect(() => {
+    setValue("combinedSealives", divespot.sealife)
+  }, [])
 
   useEffect(() => {
 
@@ -42,15 +48,15 @@ function SealifeTab(props) {
   const handleLinkSealife = () => {
     setSelectedSealives(sealives)
     if(divespot.sealife && divespot.sealife.length > 0 )
-    setCombinedSealives( [...divespot.sealife ,...selectedSealives, ...sealives])
+    setValue("combinedSealives", [...divespot.sealife ,...selectedSealives, ...sealives], { shouldDirty: true} )
     else 
-    setCombinedSealives([...selectedSealives, ...sealives])
+    setValue("combinedSealives",[...selectedSealives, ...sealives], { shouldDirty: true})
 
     setSealives([])
   }
 
   const handleRemoveSealife = (id) => {
-  setCombinedSealives(combinedState=> combinedState.filter(c=> c.id != id))
+    setValue("combinedSealives", combinedSealives.filter(c=> c.id != id), { shouldDirty: true})
   }
 
   return (
@@ -118,17 +124,17 @@ function SealifeTab(props) {
               </th>
 
               <th>
-                <Typography className="font-semibold">Action</Typography>
+                <Typography className="font-semibold text-right">Action</Typography>
               </th>
             </tr>
           </thead>
           <tbody>
 
-            {combinedSealives.map((s) => (
+            {combinedSealives?.map((s) => (
             <tr key={s.id}>
               <td className="w-64">{s.id}</td>
               <td className="w-80">
-                <img className="product-image" src={s.images[0]} alt="product" />
+                <img className="product-image" src={s.images ? s.images[0] : ""} alt="product" />
               </td>
               <td className="w-64 ">
                 <Typography
@@ -152,7 +158,7 @@ function SealifeTab(props) {
 
               <td className="w-64 text-right">
               <Button
-          className="whitespace-nowrap mx-4"
+          className="whitespace-nowrap"
           variant="contained"
           color="primary"
           onClick={() => handleRemoveSealife(s.id)}

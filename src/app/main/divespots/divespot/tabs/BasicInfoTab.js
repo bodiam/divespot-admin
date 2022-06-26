@@ -67,8 +67,8 @@ function BasicInfoTab(props) {
 
 
     maps.event.addListener(marker, 'drag', function (event) {
-      setValue("diveLocation.latitude", event.latLng.lat())
-      setValue("diveLocation.longitude", event.latLng.lng())
+      setValue("diveLocation.latitude", event.latLng.lat(), { shouldDirty: true})
+      setValue("diveLocation.longitude", event.latLng.lng(), { shouldDirty: true})
     });
 
     maps.event.addListener(marker, 'dragend', function (event) {
@@ -76,8 +76,8 @@ function BasicInfoTab(props) {
     });
 
     maps.event.addListener(startLocationMarker, 'drag', function (event) {
-      setValue("startLocation.latitude", event.latLng.lat())
-      setValue("startLocation.longitude", event.latLng.lng())
+      setValue("startLocation.latitude", event.latLng.lat(), { shouldDirty: true})
+      setValue("startLocation.longitude", event.latLng.lng(), { shouldDirty: true})
     });
 
     maps.event.addListener(map, "rightclick", function (event) {
@@ -98,8 +98,8 @@ function BasicInfoTab(props) {
 
                 <Button
                   onClick={() => {
-                    setValue("startLocation.latitude", event.latLng.lat())
-                    setValue("startLocation.longitude", event.latLng.lng())
+                    setValue("startLocation.latitude", event.latLng.lat(), { shouldDirty: true})
+                    setValue("startLocation.longitude", event.latLng.lng(), { shouldDirty: true})
                     startLocationMarker.setPosition({ lat: event.latLng.lat(), lng: event.latLng.lng() })
                     dispatch(closeDialog());
                   }}
@@ -110,8 +110,8 @@ function BasicInfoTab(props) {
 
                 <Button
                   onClick={() => {
-                    setValue("diveLocation.latitude", event.latLng.lat())
-                    setValue("diveLocation.longitude", event.latLng.lng())
+                    setValue("diveLocation.latitude", event.latLng.lat(), { shouldDirty: true})
+                    setValue("diveLocation.longitude", event.latLng.lng(), { shouldDirty: true})
                     marker.setPosition({ lat: event.latLng.lat(), lng: event.latLng.lng() })
                     dispatch(closeDialog());
                   }}
@@ -514,6 +514,7 @@ function BasicInfoTab(props) {
               onChange(newValue.map(x=> {return {name: x}}));
             }}
             options={[]}
+            getOptionLabel={(s) => s && s.name}
             renderInput={(params) => (
               <TextField
                 {...params}
