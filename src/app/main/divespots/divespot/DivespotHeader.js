@@ -27,7 +27,7 @@ function DivespotHeader(props) {
   const theme = useTheme();
   const navigate = useNavigate();
   const user = useSelector(({ user }) => user);
-console.log(user)
+  
   function handleSaveDivespot() {
     dispatch(saveDivespot(
       {

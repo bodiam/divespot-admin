@@ -33,7 +33,7 @@ function ReviewsTab(props) {
           </tr>
         </thead>
         <tbody>
-          {divespot.reviews?.map((s) => (
+          {divespot?.reviews?.map((s) => (
             <tr key={s.id}>
               <td className="w-64">{s.id}</td>
               <td>

@@ -26,7 +26,7 @@ function SealifeTab(props) {
 
   
   useEffect(() => {
-    setValue("combinedSealives", divespot.sealife)
+    setValue("combinedSealives", divespot?.sealife)
   }, [])
 
   useEffect(() => {

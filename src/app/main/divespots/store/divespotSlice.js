@@ -48,7 +48,8 @@ export const saveDivespot = createAsyncThunk(
       if (id) {
         await axios.patch(`/admin/divespot/${id}`, {
           ...divespotData,
-          ...(divespotData.images && { images: [...divespotData.images, ...links] })
+          ...(divespotData.images && { images: [...divespotData.images, ...links] }),
+          startLocation : (!divespotData.startLocation.latitude || !divespotData.startLocation.longitude) ? null  : divespotData.startLocation
         })
         if(divespotData.combinedSealives ) {
           var uriList = ''
@@ -100,8 +101,8 @@ const divespotSlice = createSlice({
             longitude: 50
           },
           startLocation: {
-            latitude: 51,
-            longitude: 50
+            latitude: null,
+            longitude: null
           },
           depth: {
             minDepth: 0,
@@ -111,9 +112,10 @@ const divespotSlice = createSlice({
             minVisibility: 0,
             maxVisibility: 0
           },
-          entranceType: '',
-          level: '',
-          diveSiteType: '',
+          entranceType: null,
+          level: null,
+          diveSiteType: null,
+          activityType: [],
           author: '',
           description: '',
           tags: [],

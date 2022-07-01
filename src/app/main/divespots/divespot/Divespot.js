@@ -42,7 +42,44 @@ function Divespot(props) {
   const [noDivespot, setNoDivespot] = useState(false);
   const methods = useForm({
     mode: 'onChange',
-    defaultValues: {},
+    defaultValues: {
+      name: '',
+      location: '',
+      diveLocation: {
+        latitude: 50,
+        longitude: 50
+      },
+      startLocation: {
+        latitude: null,
+        longitude: null
+      },
+      depth: {
+        minDepth: 0,
+        maxDepth: 0
+      },
+      visibility: {
+        minVisibility: 0,
+        maxVisibility: 0
+      },
+      activityType: [],
+      tags: [],
+      entranceType: null,
+      level: null,
+      diveSiteType: null,
+      author: '',
+          description: '',
+          tags: [],
+          sealife: [],
+          reviews: [],
+          price: {
+            amount: 0,
+            code: ''
+          },
+          dateCreated: new Date().toISOString(),
+          uploadedImages: [],
+          images: [],
+          combinedSealives: []
+    },
     resolver: yupResolver(schema),
   });
   const { reset, watch, control, onChange, formState } = methods;

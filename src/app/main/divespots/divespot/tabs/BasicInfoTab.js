@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Controller, useFormContext } from 'react-hook-form';
 import GoogleMap from 'google-map-react';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -17,7 +17,7 @@ import Button from '@mui/material/Button';
 import { useDispatch } from 'react-redux';
 import codes from "./codes"
 import InputAdornment from '@mui/material/InputAdornment';
-
+let marker, startLocationMarker, _map;
 function BasicInfoTab(props) {
   const dispatch = useDispatch();
   const methods = useFormContext();
@@ -35,12 +35,19 @@ function BasicInfoTab(props) {
       lat: latitude,
       lng: longitude
     }
-  }
-    , [])
+  }, [latitude, longitude])
 
-  let marker, startLocationMarker;
-  var loadMap = (map, maps) => {
+ useEffect(()=>{
+ if(marker)
+  marker.setPosition({ lat: latitude, lng: longitude })
+  if(startLocationMarker && startLatitude && startLongitude) 
+  startLocationMarker.setPosition({ lat: startLatitude, lng: startLongitude })
 
+ }, [latitude, longitude, startLatitude, startLongitude])
+
+
+  var loadMap = (map, maps) => { 
+   _map = map
 
 
     marker = new maps.Marker({
@@ -51,34 +58,43 @@ function BasicInfoTab(props) {
       icon: "assets/images/markers/blue_MarkerD.png"
     })
 
+    if(startLatitude && startLongitude ) {
+      startLocationMarker = new maps.Marker({
+        title: "Start Location of " + name,
+        position: { lat: startLatitude, lng: startLongitude },
+        map,
+        draggable: true,
+        icon: "assets/images/markers/yellow_MarkerS.png"
+      })
+    } else {
+      startLocationMarker = new maps.Marker({
+        title: "Start Location of " + name,
+        position: { lat: 0, lng: 0 },
+        map,
+        draggable: true,
+        icon: "assets/images/markers/yellow_MarkerS.png",
+      })
+    }
 
-    startLocationMarker = new maps.Marker({
-      title: name,
-      position: { lat: startLatitude, lng: startLongitude },
-      map,
-      draggable: true,
-      icon: "assets/images/markers/yellow_MarkerS.png"
 
-
-    })
-
+        maps.event.addListener(startLocationMarker, 'drag', function (event) {
+      setValue("startLocation.latitude", event.latLng.lat(), { shouldDirty: true })
+      setValue("startLocation.longitude", event.latLng.lng(), { shouldDirty: true })
+    });
 
     document.addEventListener("contextmenu", e => e.preventDefault());
 
 
     maps.event.addListener(marker, 'drag', function (event) {
-      setValue("diveLocation.latitude", event.latLng.lat(), { shouldDirty: true})
-      setValue("diveLocation.longitude", event.latLng.lng(), { shouldDirty: true})
+      setValue("diveLocation.latitude", event.latLng.lat(), { shouldDirty: true })
+      setValue("diveLocation.longitude", event.latLng.lng(), { shouldDirty: true })
     });
 
     maps.event.addListener(marker, 'dragend', function (event) {
       map.setCenter({ lat: event.latLng.lat(), lng: event.latLng.lng() })
     });
 
-    maps.event.addListener(startLocationMarker, 'drag', function (event) {
-      setValue("startLocation.latitude", event.latLng.lat(), { shouldDirty: true})
-      setValue("startLocation.longitude", event.latLng.lng(), { shouldDirty: true})
-    });
+
 
     maps.event.addListener(map, "rightclick", function (event) {
       dispatch(
@@ -98,8 +114,8 @@ function BasicInfoTab(props) {
 
                 <Button
                   onClick={() => {
-                    setValue("startLocation.latitude", event.latLng.lat(), { shouldDirty: true})
-                    setValue("startLocation.longitude", event.latLng.lng(), { shouldDirty: true})
+                    setValue("startLocation.latitude", event.latLng.lat(), { shouldDirty: true })
+                    setValue("startLocation.longitude", event.latLng.lng(), { shouldDirty: true })
                     startLocationMarker.setPosition({ lat: event.latLng.lat(), lng: event.latLng.lng() })
                     dispatch(closeDialog());
                   }}
@@ -110,13 +126,13 @@ function BasicInfoTab(props) {
 
                 <Button
                   onClick={() => {
-                    setValue("diveLocation.latitude", event.latLng.lat(), { shouldDirty: true})
-                    setValue("diveLocation.longitude", event.latLng.lng(), { shouldDirty: true})
+                    setValue("diveLocation.latitude", event.latLng.lat(), { shouldDirty: true })
+                    setValue("diveLocation.longitude", event.latLng.lng(), { shouldDirty: true })
                     marker.setPosition({ lat: event.latLng.lat(), lng: event.latLng.lng() })
                     dispatch(closeDialog());
                   }}
                   sx={{ backgroundColor: '#2E2EFF' }}
-                  
+
                 >
                   Dive Location
                 </Button>
@@ -131,10 +147,7 @@ function BasicInfoTab(props) {
 
 
 
-  };
-
-
-
+  }
 
   return (
     <div>
@@ -188,15 +201,15 @@ function BasicInfoTab(props) {
                 <TextField
                   value={value}
                   onChange={(e) => {
-                    onChange(e.target.value)
-                    marker.setPosition({ lat: parseFloat(e.target.value).toFixed(6), lng: longitude })
-                    marker.map.setCenter({ lat: parseFloat(e.target.value).toFixed(6), lng: longitude })
+                    onChange(parseFloat(parseFloat(e.target.value ? e.target.value : 0)))
+                    marker.setPosition({ lat: parseFloat(parseFloat(e.target.value ? e.target.value : 0)), lng: longitude })
+                    marker.map.setCenter({ lat: parseFloat(parseFloat(e.target.value ? e.target.value : 0)), lng: longitude })
                   }}
                   className="mt-8 mb-16 mx-2"
                   error={!!errors.latitude}
                   helperText={errors?.latitude?.message}
                   label="Latitude"
-                  
+
                   id="latitude"
                   variant="outlined"
                   fullWidth
@@ -212,15 +225,15 @@ function BasicInfoTab(props) {
                 <TextField
                   value={value}
                   onChange={(e) => {
-                    onChange(e.target.value)
-                    marker.setPosition({ lat: latitude, lng: parseFloat(e.target.value).toFixed(6) })
-                    marker.map.setCenter({ lat: latitude, lng: parseFloat(e.target.value).toFixed(6) })
+                    onChange(parseFloat(parseFloat(e.target.value ? e.target.value : 0)))
+                    marker.setPosition({ lat: latitude, lng: parseFloat(parseFloat(e.target.value ? e.target.value : 0)) })
+                    marker.map.setCenter({ lat: latitude, lng: parseFloat(parseFloat(e.target.value ? e.target.value : 0)) })
                   }}
                   className="mt-8 mb-16"
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Longitude"
-                  
+
                   id="longitude"
                   variant="outlined"
                   fullWidth
@@ -238,16 +251,23 @@ function BasicInfoTab(props) {
               control={control}
               render={({ field: { value, onChange } }) => (
                 <TextField
-                  value={value}
+                  value={value ?? ''}
                   onChange={(e) => {
-                    onChange(e.target.value)
-                    startLocationMarker.setPosition({ lat: parseFloat(e.target.value), lng: startLongitude })
+                    onChange(e.target.value ? parseFloat(parseFloat( e.target.value)) : null)
+                    if(e.target.value && startLongitude != null){
+                      startLocationMarker.setMap(_map)
+                      startLocationMarker.setPosition({ lat:  parseFloat(parseFloat(e.target.value)) , lng: startLongitude })
+                    }
+                     else {
+                      startLocationMarker.setMap(null)
+
+                     }
                   }}
                   className="mt-8 mb-16 mx-2"
                   error={!!errors.startLatitude}
                   helperText={errors?.startLatitude?.message}
                   label="Latitude"
-                  
+
                   id="startLatitude"
                   variant="outlined"
                   fullWidth
@@ -261,16 +281,24 @@ function BasicInfoTab(props) {
               control={control}
               render={({ field: { value, onChange } }) => (
                 <TextField
-                  value={value}
+                  value={value ?? ''}
                   onChange={(e) => {
-                    onChange(e.target.value)
-                    startLocationMarker.setPosition({ lat: startLatitude, lng: parseFloat(e.target.value) })
+                    onChange(e.target.value ? parseFloat(parseFloat(e.target.value)) : null)
+                    if(e.target.value  && startLatitude != null) {
+                      startLocationMarker.setMap(_map)
+                      startLocationMarker.setPosition({ lat: startLatitude, lng: parseFloat(parseFloat(e.target.value))})
+
+                    }
+                  else {
+                    startLocationMarker.setMap(null)
+                  }
+         
                   }}
                   className="mt-8 mb-16"
                   error={!!errors.startLongitude}
                   helperText={errors?.startLongitude?.message}
                   label="Longitude"
-                  
+
                   id="startLongitude"
                   variant="outlined"
                   fullWidth
@@ -294,7 +322,7 @@ function BasicInfoTab(props) {
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Min"
-                  
+
                   id="depth.minDepth"
                   variant="outlined"
                   fullWidth
@@ -313,7 +341,7 @@ function BasicInfoTab(props) {
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Max"
-                  
+
                   id="depth.maxDepth"
                   variant="outlined"
                   fullWidth
@@ -330,7 +358,7 @@ function BasicInfoTab(props) {
             <Controller
               name="visibility.minVisibility"
               control={control}
-              render={({ field:{value, onChange} }) => (
+              render={({ field: { value, onChange } }) => (
                 <TextField
                   value={value ?? 0}
                   onChange={(event) => {
@@ -340,7 +368,7 @@ function BasicInfoTab(props) {
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Min"
-                  
+
                   id="visibility.minVisibility"
                   variant="outlined"
                   fullWidth
@@ -352,17 +380,17 @@ function BasicInfoTab(props) {
             <Controller
               name="visibility.maxVisibility"
               control={control}
-              render={({ field:{value, onChange} }) => (
+              render={({ field: { value, onChange } }) => (
                 <TextField
-                value={value ?? 0}
-                onChange={(event) => {
-                  onChange(parseInt(event.target.value).toFixed(0));
-                }}
+                  value={value ?? 0}
+                  onChange={(event) => {
+                    onChange(parseInt(event.target.value).toFixed(0));
+                  }}
                   className="mt-8 mb-16"
                   error={!!errors.longitude}
                   helperText={errors?.longitude?.message}
                   label="Max"
-                  
+
                   id="visibility.maxVisibility"
                   variant="outlined"
                   fullWidth
@@ -384,6 +412,7 @@ function BasicInfoTab(props) {
             defaultZoom={5}
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({ map, maps }) => loadMap(map, maps)}
+            
           >
           </GoogleMap>
         </div>
@@ -393,12 +422,11 @@ function BasicInfoTab(props) {
       <Controller
         name="level"
         control={control}
-        defaultValue={[]}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
             options={["BEGINNER", "INTERMEDIATE", "ADVANCED"]}
-            value={value}
+            value={value ?? null}
             onChange={(event, newValue) => {
               onChange(newValue);
             }}
@@ -420,12 +448,11 @@ function BasicInfoTab(props) {
       <Controller
         name="entranceType"
         control={control}
-        defaultValue={[]}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
             options={["SHORE_DIVE", "BOAT_DIVE"]}
-            value={value}
+            value={value ?? null}
             onChange={(event, newValue) => {
               onChange(newValue);
             }}
@@ -447,12 +474,11 @@ function BasicInfoTab(props) {
       <Controller
         name="diveSiteType"
         control={control}
-        defaultValue={[]}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
             options={["WRECK_DIVE", "CAVE_DIVE", "REEF_DIVE", "ARTIFICAL_REEF", "QUARRY_DIVE", "LAKE", "MUCK", "ROCKY_REEF", "POOL", "RIVER", "RESERVOIR", "WALL"]}
-            value={value}
+            value={value ?? null}
             onChange={(event, newValue) => {
               onChange(newValue);
             }}
@@ -471,10 +497,9 @@ function BasicInfoTab(props) {
         )}
       />
 
-<Controller
+      <Controller
         name="activityType"
         control={control}
-        defaultValue={[]}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
@@ -503,18 +528,17 @@ function BasicInfoTab(props) {
       <Controller
         name="tags"
         control={control}
-        defaultValue={[]}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
             freeSolo
             multiple
-            value={value.map(x=> x.name)}
+            value={value ? value.map(x => x.name) : []}
             onChange={(event, newValue) => {
-              onChange(newValue.map(x=> {return {name: x}}));
+              onChange(newValue.map(x => { return { name: x } }));
             }}
             options={[]}
-            getOptionLabel={(s) => s && s.name}
+            getOptionLabel={(option) => option ? option.name : ''}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -531,59 +555,61 @@ function BasicInfoTab(props) {
       />
 
 
-<div className='flex'>
-      <Controller
-        name="price.amount"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className="mt-8 mb-16 mx-2"
-            label="Amount"
-            placeholder="Select Amount"
-            id="amount"
-            type="number"
-            variant="outlined"
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        )}
-      />
+      <div className='flex'>
+        <Controller
+          name="price.amount"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              className="mt-8 mb-16 mx-2"
+              label="Amount"
+              placeholder="Select Amount"
+              id="amount"
+              type="number"
+              variant="outlined"
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          )}
+        />
 
-<Controller
-        name="price.code"
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <Autocomplete
-            className="mt-8 mb-16 mx-2"
-            freeSolo
-            options={codes}
-            value={value}
-            onChange={(event, newValue) => {
-              onChange(newValue);
-            }}
-            fullWidth
+        <Controller
+          name="price.code"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Autocomplete
+              className="mt-8 mb-16 mx-2"
+              freeSolo
+              options={codes}
+              getOptionLabel={(option) => option ?? ''}
+              isOptionEqualToValue={(option, value) =>  true}
+              value={value ?? null}
+              onChange={(event, newValue) => {
+                onChange(newValue);
+              }}
+              fullWidth
 
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="Select Currency Code"
-                label="Code"
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Select Currency Code"
+                  label="Code"
+                  variant="outlined"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              )}
 
-          />
-        )}
-      />
+            />
+          )}
+        />
 
 
-    </div>
+      </div>
 
 
 
