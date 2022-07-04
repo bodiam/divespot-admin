@@ -33,7 +33,7 @@ function SealifeTab(props) {
 
 
     const asyncFn = async () => {
-      const response = await axios.get(`/admin/sealife/search/findByBinomialName?name=${searchText}&sort=binomialName&page=0&size=20`);
+      const response = await axios.get(`/admin/sealife/search/findByBinomialName?name=${searchText}`);
       const data = await response.data;
       setSealivesOptions(data)
     };
