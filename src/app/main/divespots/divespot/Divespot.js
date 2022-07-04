@@ -46,8 +46,8 @@ function Divespot(props) {
       name: '',
       location: '',
       diveLocation: {
-        latitude: 50,
-        longitude: 50
+        latitude: null,
+        longitude: null
       },
       startLocation: {
         latitude: null,
@@ -67,18 +67,17 @@ function Divespot(props) {
       level: null,
       diveSiteType: null,
       author: '',
-          description: '',
-          tags: [],
-          sealife: [],
-          reviews: [],
-          price: {
-            amount: 0,
-            code: ''
-          },
-          dateCreated: new Date().toISOString(),
-          uploadedImages: [],
-          images: [],
-          combinedSealives: []
+      description: '',
+      sealife: [],
+      reviews: [],
+      price: {
+        amount: 0,
+        code: ''
+      },
+      dateCreated: new Date().toISOString(),
+      uploadedImages: [],
+      images: [],
+      combinedSealives: []
     },
     resolver: yupResolver(schema),
   });
@@ -191,7 +190,7 @@ function Divespot(props) {
               classes={{ root: 'w-full h-64 border-b-1' }}
             >
               <Tab className="h-64" label="Basic Info" />
-              <Tab className="h-64" label="Divespot Images"/>
+              <Tab className="h-64" label="Divespot Images" />
               <Tab className="h-64" label="Sea life" />
               <Tab className="h-64" label="Reviews" />
 
@@ -220,7 +219,7 @@ function Divespot(props) {
           </>
         }
         scroll={isMobile ? 'page' : 'content'}
-        
+
       />
     </FormProvider>
   );

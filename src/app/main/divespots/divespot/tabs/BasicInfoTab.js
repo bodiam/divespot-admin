@@ -533,22 +533,12 @@ function BasicInfoTab(props) {
             className="mt-8 mb-16"
             freeSolo
             multiple
-            value={() => { 
-//console.log("value: ", value)
- //if(value) 
- //return value.map(x => x.name) 
-//else
-// return []
-          return value
-        }
-}
+            value={value}
             onChange={(event, newValue) => {
-              //console.log("newValue: ", newValue)
-              //onChange(newValue.map(x => { return { name: x } }));
-              onChange(newValue)
+              onChange(newValue.map(x=> { return x.name ? x : {name : x}}))
             }}
             options={[]}
-            getOptionLabel={(option) => option ? option.name : ''}
+            getOptionLabel={(option)=>option.name}
             renderInput={(params) => (
               <TextField
                 {...params}

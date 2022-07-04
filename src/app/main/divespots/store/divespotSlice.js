@@ -13,8 +13,8 @@ export const getDivespot = createAsyncThunk('divespot/getDivespot', async (dives
 
 
   const sealife = await axios.get(`/admin/divespot/${divespotId}/sealife`);
-  if(sealife && sealife.data && sealife.data.content && !sealife.data.content[0].value  )
-  data.sealife = await sealife.data?.content
+  if (sealife && sealife.data && sealife.data.content && !sealife.data.content[0].value)
+    data.sealife = await sealife.data?.content
 
   return data === undefined ? null : data;
 });
@@ -49,22 +49,23 @@ export const saveDivespot = createAsyncThunk(
         await axios.patch(`/admin/divespot/${id}`, {
           ...divespotData,
           ...(divespotData.images && { images: [...divespotData.images, ...links] }),
-          startLocation : (!divespotData.startLocation.latitude || !divespotData.startLocation.longitude) ? null  : divespotData.startLocation
+          startLocation: (!divespotData.startLocation?.latitude || !divespotData.startLocation?.longitude) ? null : divespotData.startLocation,
+          //tags: divespotData.tags && divespotData.tags.map(x => { return { name: x } })
         })
-        if(divespotData.combinedSealives ) {
+        if (divespotData.combinedSealives) {
           var uriList = ''
-           divespotData.combinedSealives.map((c) => {
-   uriList = uriList + process.env.REACT_APP_API_URL + '/admin/sealife/' + c.id + '\n'
-})
+          divespotData.combinedSealives.map((c) => {
+            uriList = uriList + process.env.REACT_APP_API_URL + '/admin/sealife/' + c.id + '\n'
+          })
 
-          await axios.put(`/admin/divespot/${id}/sealife`, uriList, 
-          {
-            headers: {
+          await axios.put(`/admin/divespot/${id}/sealife`, uriList,
+            {
+              headers: {
                 'Content-Type': 'text/uri-list'
+              }
             }
-        }
-         )
-    
+          )
+
 
         }
       } else {
@@ -97,8 +98,8 @@ const divespotSlice = createSlice({
           name: '',
           location: '',
           diveLocation: {
-            latitude: 50,
-            longitude: 50
+            latitude: null,
+            longitude: null
           },
           startLocation: {
             latitude: null,
