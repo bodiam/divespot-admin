@@ -533,9 +533,19 @@ function BasicInfoTab(props) {
             className="mt-8 mb-16"
             freeSolo
             multiple
-            value={value ? value.map(x => x.name) : []}
+            value={() => { 
+//console.log("value: ", value)
+ //if(value) 
+ //return value.map(x => x.name) 
+//else
+// return []
+          return value
+        }
+}
             onChange={(event, newValue) => {
-              onChange(newValue.map(x => { return { name: x } }));
+              //console.log("newValue: ", newValue)
+              //onChange(newValue.map(x => { return { name: x } }));
+              onChange(newValue)
             }}
             options={[]}
             getOptionLabel={(option) => option ? option.name : ''}
