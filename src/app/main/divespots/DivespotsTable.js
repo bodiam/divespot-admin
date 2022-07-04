@@ -177,7 +177,7 @@ function DivespotsTable(props) {
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {`${parseFloat(n.diveLocation?.latitude?? 0).toFixed(6)}, ${parseFloat(n.diveLocation?.longitude?? 0).toFixed(6)}`}
+                      {`${ n.diveLocation?.latitude? parseFloat(n.diveLocation?.latitude) : ''} ${ n.diveLocation?.longitude ? ', ' + parseFloat(n.diveLocation?.longitude) : ''}`}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">

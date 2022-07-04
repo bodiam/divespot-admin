@@ -71,7 +71,7 @@ export const saveDivespot = createAsyncThunk(
       } else {
         await axios.post(`/admin/divespot`, {
           ...divespotData,
-          images: [...divespotData.images, ...links]
+          images: divespotData.images ? [...divespotData.images, ...links] : links
         });
       }
       dispatch(showMessage({ message: "Saved successfuly!", variant: 'success', autoHideDuration: 3000 }));

@@ -69,7 +69,6 @@ function BasicInfoTab(props) {
     } else {
       startLocationMarker = new maps.Marker({
         title: "Start Location of " + name,
-        position: { lat: 0, lng: 0 },
         map,
         draggable: true,
         icon: "assets/images/markers/yellow_MarkerS.png",
@@ -201,9 +200,9 @@ function BasicInfoTab(props) {
                 <TextField
                   value={value}
                   onChange={(e) => {
-                    onChange(parseFloat(parseFloat(e.target.value ? e.target.value : 0)))
-                    marker.setPosition({ lat: parseFloat(parseFloat(e.target.value ? e.target.value : 0)), lng: longitude })
-                    marker.map.setCenter({ lat: parseFloat(parseFloat(e.target.value ? e.target.value : 0)), lng: longitude })
+                    onChange(parseFloat(e.target.value ? e.target.value : ''))
+                    marker.setPosition({ lat: parseFloat(e.target.value ? e.target.value : ''), lng: longitude })
+                    marker.map.setCenter({ lat: parseFloat(e.target.value ? e.target.value : ''), lng: longitude })
                   }}
                   className="mt-8 mb-16 mx-2"
                   error={!!errors.latitude}
@@ -225,9 +224,9 @@ function BasicInfoTab(props) {
                 <TextField
                   value={value}
                   onChange={(e) => {
-                    onChange(parseFloat(parseFloat(e.target.value ? e.target.value : 0)))
-                    marker.setPosition({ lat: latitude, lng: parseFloat(parseFloat(e.target.value ? e.target.value : 0)) })
-                    marker.map.setCenter({ lat: latitude, lng: parseFloat(parseFloat(e.target.value ? e.target.value : 0)) })
+                    onChange(parseFloat(e.target.value ? e.target.value : ''))
+                    marker.setPosition({ lat: latitude, lng: parseFloat(e.target.value ? e.target.value : '') })
+                    marker.map.setCenter({ lat: latitude, lng: parseFloat(e.target.value ? e.target.value : '') })
                   }}
                   className="mt-8 mb-16"
                   error={!!errors.longitude}
