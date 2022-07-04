@@ -535,7 +535,7 @@ function BasicInfoTab(props) {
             multiple
             value={() => { 
 console.log("value: ", value)
- if(value) ?
+ if(value) 
  return value.map(x => x.name) 
 else
  return []
