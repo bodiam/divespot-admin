@@ -24,9 +24,7 @@ function SealifeHeader(props) {
 	const user = useSelector(({user}) => user);
 
   function handleSaveSealife() {
-    dispatch(saveSealife(dirtyValues(dirtyFields, getValues()))).then(() => {
-      navigate('/sealives');
-    });
+    dispatch(saveSealife(dirtyValues(dirtyFields, getValues())))
   }
 
 

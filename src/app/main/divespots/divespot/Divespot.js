@@ -190,7 +190,7 @@ function Divespot(props) {
               classes={{ root: 'w-full h-64 border-b-1' }}
             >
               <Tab className="h-64" label="Basic Info" />
-              <Tab className="h-64" label="Divespot Images" />
+              <Tab className="h-64" label="Images" />
               <Tab className="h-64" label="Sea life" />
               <Tab className="h-64" label="Reviews" />
 

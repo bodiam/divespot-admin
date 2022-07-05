@@ -19,10 +19,10 @@ import { removeSealives } from './store/sealivesSlice';
 
 const rows = [
   {
-    id: 'source',
+    id: 'id',
     align: 'left',
     disablePadding: false,
-    label: 'Source',
+    label: 'ID',
     sort: true,
   },
   {

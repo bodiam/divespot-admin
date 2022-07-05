@@ -7,7 +7,7 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import Box from '@mui/material/Box';
 
 const Root = styled('div')(({ theme }) => ({
-  '& .divespotImageFeaturedStar': {
+  '& .sealifeImageFeaturedStar': {
     position: 'absolute',
     top: 0,
     right: 0,
@@ -15,45 +15,54 @@ const Root = styled('div')(({ theme }) => ({
     opacity: 0,
   },
 
-  '& .divespotImageUpload': {
+  '& .sealifeImageUpload': {
     transitionProperty: 'box-shadow',
     transitionDuration: theme.transitions.duration.short,
     transitionTimingFunction: theme.transitions.easing.easeInOut,
   },
 
-  '& .divespotImageItem': {
+  '& .sealifeImageItem': {
     transitionProperty: 'box-shadow',
     transitionDuration: theme.transitions.duration.short,
     transitionTimingFunction: theme.transitions.easing.easeInOut,
     '&:hover': {
-      '& .divespotImageFeaturedStar': {
+      '& .sealifeImageFeaturedStar': {
         opacity: 0.8,
       },
     },
     '&.featured': {
       pointerEvents: 'none',
       boxShadow: theme.shadows[3],
-      '& .divespotImageFeaturedStar': {
+      '& .sealifeImageFeaturedStar': {
         opacity: 1,
       },
-      '&:hover .divespotImageFeaturedStar': {
+      '&:hover .sealifeImageFeaturedStar': {
         opacity: 1,
       },
     },
   },
 }));
 
-function DivespotImagesTab(props) {
+function SealifeImagesTab(props) {
   const methods = useFormContext();
-  const { control, watch } = methods;
+  const { control, watch, setValue, getValues } = methods;
 
   const images = watch('images');
+  const uploadedImages = watch('uploadedImages');
+
+
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 
   return (
     <Root>
       <div className="flex justify-center sm:justify-start flex-wrap -mx-16">
         <Controller
-          name="images"
+          name="uploadedImages"
           control={control}
           render={({ field: { onChange, value } }) => (
             <Box
@@ -65,7 +74,7 @@ function DivespotImagesTab(props) {
               }}
               component="label"
               htmlFor="button-file"
-              className="divespotImageUpload flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer shadow hover:shadow-lg"
+              className="sealifeImageUpload flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer shadow hover:shadow-lg"
             >
               <input
                 accept="image/*"
@@ -73,31 +82,8 @@ function DivespotImagesTab(props) {
                 id="button-file"
                 type="file"
                 onChange={async (e) => {
-                  function readFileAsync() {
-                    return new Promise((resolve, reject) => {
-                      const file = e.target.files[0];
-                      if (!file) {
-                        return;
-                      }
-                      const reader = new FileReader();
-
-                      reader.onload = () => {
-                        resolve({
-                          id: FuseUtils.generateGUID(),
-                          url: `data:${file.type};base64,${btoa(reader.result)}`,
-                          type: 'image',
-                        });
-                      };
-
-                      reader.onerror = reject;
-
-                      reader.readAsBinaryString(file);
-                    });
-                  }
-
-                  const newImage = await readFileAsync();
-
-                  onChange([newImage, ...value]);
+                  const newImage = await toBase64(e.target.files[0])
+                  setValue("uploadedImages", (uploadedImages ? [newImage, ...uploadedImages] : [newImage]), { shouldDirty: true })
                 }}
               />
               <FuseSvgIcon size={32} color="action">
@@ -106,32 +92,46 @@ function DivespotImagesTab(props) {
             </Box>
           )}
         />
-        <Controller
-          name="featuredImageId"
-          control={control}
-          defaultValue=""
-          render={({ field: { onChange, value } }) =>
-            images?.map((media) => (
-              <div
-                onClick={() => onChange(media.id)}
-                onKeyDown={() => onChange(media.id)}
-                role="button"
-                tabIndex={0}
-                className={clsx(
-                  'divespotImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg',
-                  media.id === value && 'featured'
-                )}
-                key={media.id}
-              >
-                <FuseSvgIcon className="divespotImageFeaturedStar">heroicons-solid:star</FuseSvgIcon>
-                <img className="max-w-none w-auto h-full" src={media.url} alt="divespot" />
-              </div>
-            ))
-          }
-        />
+
+        {uploadedImages?.map((image, key) => (
+          <div
+          onClick={() => setValue("uploadedImages", uploadedImages.filter(function(value, index){ 
+            return index != key
+        }), { shouldDirty: true })}
+            role="button"
+            tabIndex={0}
+            className={clsx(
+              'sealifeImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg'
+            )}
+            key={'uploaded' + key}
+          >
+            <FuseSvgIcon className="sealifeImageFeaturedStar">heroicons-solid:upload</FuseSvgIcon>
+            <img className="max-w-none w-auto h-full" src={image} alt="divespot" />
+           
+            </div>
+            
+        ))}
+
+        {images?.map((image, key) => (
+          <div
+            onClick={() => setValue("images", images.filter(function(value, index){ 
+              return index != key
+          }), { shouldDirty: true })}
+            role="button"
+            tabIndex={0}
+            className={clsx(
+              'sealifeImageItem flex items-center justify-center relative w-128 h-128 rounded-16 mx-12 mb-24 overflow-hidden cursor-pointer outline-none shadow hover:shadow-lg'
+            )}
+            key={'image' + key}
+          >
+            <FuseSvgIcon className="sealifeImageFeaturedStar">heroicons-solid:check</FuseSvgIcon>
+            <img className="max-w-none w-auto h-full" src={image} alt="divespot" />
+          </div>
+        ))}
+
       </div>
     </Root>
   );
 }
 
-export default DivespotImagesTab;
+export default SealifeImagesTab;

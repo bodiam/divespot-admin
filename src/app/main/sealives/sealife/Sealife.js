@@ -27,7 +27,7 @@ import ReviewsTab from './tabs/ShippingTab';
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  name: yup
+  binomialName: yup
     .string()
     .required('You must enter a sealife name')
 });
@@ -42,7 +42,26 @@ function Sealife(props) {
   const [noSealife, setNoSealife] = useState(false);
   const methods = useForm({
     mode: 'onChange',
-    defaultValues: {},
+    defaultValues:  {
+      id: null,
+      description: '',
+      tags: [],
+      sealife: [],
+      reviews: [],
+      source : "",
+      commonNames : [],
+      binomialName : "",
+      familyName : "",
+      images : [],
+      links : [ ],
+      distribution : "",
+      content : [],
+      similarSealife : [ ],
+      extraInfo : {},
+      locations : [ ],
+      latitude : null,
+      longitude : null
+    },
     resolver: yupResolver(schema),
   });
   const { reset, watch, control, onChange, formState } = methods;
@@ -154,9 +173,7 @@ function Sealife(props) {
               classes={{ root: 'w-full h-64 border-b-1' }}
             >
               <Tab className="h-64" label="Basic Info" />
-              <Tab className="h-64" label="Sealife Images" disabled/>
-              <Tab className="h-64" label="Sea life" disabled/>
-              <Tab className="h-64" label="Reviews" disabled/>
+              <Tab className="h-64" label="Images" />
             </Tabs>
             <div className="p-16 sm:p-24 max-w-3xl">
               <div className={tabValue !== 0 ? 'hidden' : ''}>
@@ -167,13 +184,6 @@ function Sealife(props) {
                 <SealifeImagesTab />
               </div>
 
-              <div className={tabValue !== 2 ? 'hidden' : ''}>
-                <SealifeTab />
-              </div>
-
-              <div className={tabValue !== 3 ? 'hidden' : ''}>
-                <ReviewsTab />
-              </div>
             </div>
           </>
         }

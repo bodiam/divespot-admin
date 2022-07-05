@@ -182,7 +182,7 @@ function SealivesTable(props) {
 
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="left">
-                      {n.source}
+                      {n.id}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
