@@ -27,6 +27,7 @@ const navigationConfig = [
     title: 'Reviews',
     type: 'item',
     url: '/reviews',
+    disabled: true
   }
 ];
 

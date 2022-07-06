@@ -10,14 +10,14 @@ const DivespotsConfig = {
     layout: {},
   },
   routes: [
-    {
+    /*{
       path: '/reviews',
       element: <Divespots />,
     },
     {
       path: '/reviews/:divespotId',
       element: <Divespot />,
-    },
+    },*/
 
   ],
 };
