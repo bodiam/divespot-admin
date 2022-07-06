@@ -126,7 +126,7 @@ const divespotSlice = createSlice({
             amount: 0,
             code: ''
           },
-          dateCreated: new Date().toISOString(),
+          createDateTime: new Date().toISOString(),
           uploadedImages: [],
           images: [],
           combinedSealives: []

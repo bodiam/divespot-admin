@@ -189,7 +189,7 @@ function DivespotsTable(props) {
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.dateCreated ? new Date(n.dateCreated).toLocaleString() : 'N/A'}
+                      {n.createDateTime ? new Date(n.createDateTime).toLocaleString() : 'N/A'}
                     </TableCell>
 
                   </TableRow>

@@ -51,7 +51,7 @@ const divespotSlice = createSlice({
           location: '',
           entranceType: '',
           author: '',
-          dateCreated: new Date().toLocaleString(),
+          createDateTime: new Date().toLocaleString(),
           description: '',
           tags: [],
           sealife: [],
