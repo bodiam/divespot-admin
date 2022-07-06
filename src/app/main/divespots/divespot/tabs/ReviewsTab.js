@@ -4,14 +4,30 @@ import { selectDivespot } from '../../store/divespotSlice';
 import { useSelector } from 'react-redux';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
+import Fab from '@mui/material/Fab';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import { useState } from 'react';
 
 function ReviewsTab(props) {
   const methods = useFormContext();
   const { control } = methods;
   const divespot = useSelector(selectDivespot);
-
+  const [open, setOpen] = useState(false)
   return (
     <div className="table-responsive">
+
+      <Fab
+        className="absolute right-0 bottom-0 m-8"
+        variant="extended"
+        size="small"
+        color="secondary"
+        aria-label="Add a review"
+        type="button"
+        onClick={() => setOpen(true)}
+      >
+        <FuseSvgIcon size={20}>heroicons-outline:plus</FuseSvgIcon>
+      </Fab>
+
       <table className="simple">
         <thead>
           <tr>
