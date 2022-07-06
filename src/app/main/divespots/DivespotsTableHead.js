@@ -47,7 +47,7 @@ const rows = [
     sort: true,
   },
   {
-    id: 'dateCreated',
+    id: 'createDateTime',
     align: 'right',
     disablePadding: false,
     label: 'Created At',
