@@ -22,12 +22,10 @@ function SealivesTable(props) {
   const dispatch = useDispatch();
   const sealives = useSelector(selectSealives);
   const searchText = useSelector(selectSealivesSearchText);
-  const totalPages = useSelector(({SL}) =>  SL.sealives.totalPages);
   const totalElements = useSelector(({SL}) =>  SL.sealives.totalElements);
 
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState([]);
-  const [data, setData] = useState(sealives);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [order, setOrder] = useState({
@@ -35,21 +33,12 @@ function SealivesTable(props) {
     id: null,
   });
 
-  useEffect(() => {
-    setLoading(true)
-    dispatch(getSealives({page, rowsPerPage})).then(() => setLoading(false));
-  }, [dispatch, page, rowsPerPage]);
+
 
   useEffect(() => {
-    if (searchText.length !== 0) {
-      setData(
-        _.filter(sealives, (item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
-      );
-      setPage(0);
-    } else {
-      setData(sealives);
-    }
-  }, [sealives, searchText]);
+    setLoading(true)
+    dispatch(getSealives({page, rowsPerPage, searchText})).then(() => setLoading(false));
+  }, [dispatch, page, rowsPerPage, searchText]);
 
   function handleRequestSort(event, property) {
     const id = property;
@@ -67,7 +56,7 @@ function SealivesTable(props) {
 
   function handleSelectAllClick(event) {
     if (event.target.checked) {
-      setSelected(data.map((n) => n.id));
+      setSelected(sealives.map((n) => n.id));
       return;
     }
     setSelected([]);
@@ -117,7 +106,7 @@ function SealivesTable(props) {
     );
   }
 
-  if (data.length === 0) {
+  if (sealives.length === 0) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -140,13 +129,13 @@ function SealivesTable(props) {
             order={order}
             onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
-            rowCount={data.length}
+            rowCount={sealives.length}
             onMenuItemClick={handleDeselect}
           />
 
           <TableBody>
             {_.orderBy(
-              data,
+              sealives,
               [
                 (o) => {
                   switch (order.id) {
@@ -186,7 +175,7 @@ function SealivesTable(props) {
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">
-                      {n.commonNames.join(", ")}
+                      {n.commonNames?.join(", ")}
                     </TableCell>
 
                     <TableCell className="p-4 md:p-16" component="th" scope="row" align="right">

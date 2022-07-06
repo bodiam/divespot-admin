@@ -4,12 +4,19 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 //axios.defaults.headers.common.Authorization = `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaGFzc2VuQGRpdmVzcG90LmNvbSIsImlhdCI6MTY1MzM4MDgwMSwiZXhwIjoxNjUzMzk4ODAxfQ.OJB43zUzZeO-9fa2HMsvxqHno9s3BEpX_lOUurTMIF_L72Q2Mz54_-n-mQWiu3gBsp1Pv5ehSYqV4CMBW9JHbg`;
 
 
-export const getSealives = createAsyncThunk('sealives/getSealives', async ({page, rowsPerPage}) => {
-  const response = await axios.get(`/admin/sealife?sort=binomialName${page != undefined && rowsPerPage != undefined ? `&page=${page}&size=${rowsPerPage}` : ``} `);
-  const data = await response.data.content;
-  const totalPages = await response.data.page.totalPages;
-  const totalElements = await response.data.page.totalElements;
-  return {data, totalPages, totalElements};
+export const getSealives = createAsyncThunk('sealives/getSealives', async ({page, rowsPerPage, searchText}) => {
+
+  if(searchText && searchText.length !== 0) {
+    const searchResponse = await axios.get(`/admin/sealife/search?q=${searchText}&sort=binomialName`);
+    const searchData = await searchResponse.data.content;
+    const searchTotalElements = await searchResponse.data.content.length;
+    return {data: searchData,  totalElements: searchTotalElements}; 
+  }else{
+    const response = await axios.get(`/admin/sealife?sort=binomialName&page=${page}&size=${rowsPerPage}`);
+    const data = await response.data.content;
+    const totalElements = await response.data.page.totalElements;
+    return {data, totalElements};
+  }
 });
 
 export const removeSealives = createAsyncThunk(
@@ -49,9 +56,8 @@ const sealivesSlice = createSlice({
   },
   extraReducers: {
     [getSealives.fulfilled]: (state, action) => {
-      const { data, totalPages, totalElements } = action.payload;
+      const { data, totalElements } = action.payload;
 			sealivesAdapter.setAll(state, data);
-      state.totalPages = totalPages
       state.totalElements = totalElements
     },
     [removeSealives.fulfilled]: (state, action) =>
