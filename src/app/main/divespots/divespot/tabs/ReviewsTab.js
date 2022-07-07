@@ -24,6 +24,7 @@ function ReviewsTab(props) {
         aria-label="Add a review"
         type="button"
         onClick={() => setOpen(true)}
+        disabled
       >
         <FuseSvgIcon size={20}>heroicons-outline:plus</FuseSvgIcon>
       </Fab>
