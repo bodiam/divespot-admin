@@ -85,6 +85,8 @@ function DivespotImagesTab(props) {
                   const newImage = await toBase64(e.target.files[0])
                   setValue("uploadedImages", (uploadedImages ? [newImage, ...uploadedImages] : [newImage]), { shouldDirty: true })
                 }}
+                onClick={(e) =>  e.target.value = ''}
+                
               />
               <FuseSvgIcon size={32} color="action">
                 heroicons-outline:upload

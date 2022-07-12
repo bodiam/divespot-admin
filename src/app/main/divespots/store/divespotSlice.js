@@ -48,7 +48,7 @@ export const saveDivespot = createAsyncThunk(
       if (id) {
         await axios.patch(`/admin/divespot/${id}`, {
           ...divespotData,
-          ...(divespotData.images && { images: [...divespotData.images, ...links] }),
+          images: divespotData.images ? [...divespotData.images, ...links] : links,
           startLocation: (!divespotData.startLocation?.latitude || !divespotData.startLocation?.longitude) ? null : divespotData.startLocation,
           //tags: divespotData.tags && divespotData.tags.map(x => { return { name: x } })
         })

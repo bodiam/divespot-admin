@@ -5,8 +5,17 @@ import GoogleMap from 'google-map-react';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import Tooltip from '@mui/material/Tooltip';
 import { useEffect, useMemo } from 'react';
+import { closeDialog, openDialog } from 'app/store/fuse/dialogSlice';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import { useDispatch } from 'react-redux';
+
 let marker, _map;
 function BasicInfoTab(props) {
+  const dispatch = useDispatch();
   const methods = useFormContext();
   const { control, formState, watch, setValue } = methods;
   const { errors } = formState;
@@ -17,14 +26,14 @@ function BasicInfoTab(props) {
 
   const defaultCenter = useMemo(() => {
     return {
-      lat: latitude,
-      lng: longitude
+      lat: latitude || 20,
+      lng: longitude || 70
     }
   }, [latitude, longitude])
 
   useEffect(()=>{
     if(marker)
-     marker.setPosition({ lat: latitude, lng: longitude })
+     marker.setPosition({ lat: latitude || 20, lng: longitude || 70 })
 
     }, [latitude, longitude])
    
@@ -35,7 +44,7 @@ function BasicInfoTab(props) {
    
        marker = new maps.Marker({
          title: binomialName,
-         position: { lat: latitude, lng: longitude },
+         position: { lat: latitude || 20, lng: longitude || 70 },
          map,
          draggable: true,
          icon: "assets/images/markers/blue_MarkerD.png"
@@ -211,7 +220,6 @@ function BasicInfoTab(props) {
           <TextField
             {...field}
             className="mt-8 mb-16"
-            required
             error={!!errors.familyName}
             helperText={errors?.familyName?.message}
             label="Family Name"
@@ -304,6 +312,9 @@ function BasicInfoTab(props) {
       variant="outlined"
       fullWidth
       type="number"
+      InputLabelProps={{
+        shrink: true,
+      }}
     />
   )}
 />
@@ -328,6 +339,9 @@ function BasicInfoTab(props) {
       variant="outlined"
       fullWidth
       type="number"
+      InputLabelProps={{
+        shrink: true,
+      }}
     />
   )}
 />
@@ -352,17 +366,17 @@ function BasicInfoTab(props) {
 <Controller
         name="tags"
         control={control}
-        defaultValue={[]}
         render={({ field: { onChange, value } }) => (
           <Autocomplete
             className="mt-8 mb-16"
             freeSolo
             multiple
-            options={[]}
             value={value}
             onChange={(event, newValue) => {
-              onChange(newValue.map(x=> { return x.name ? x : {name : x}}))
+              onChange(newValue)
             }}
+            options={[]}
+            getOptionLabel={(option)=>option}
             renderInput={(params) => (
               <TextField
                 {...params}

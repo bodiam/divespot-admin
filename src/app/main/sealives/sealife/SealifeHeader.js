@@ -18,13 +18,18 @@ function SealifeHeader(props) {
   const { isValid, dirtyFields } = formState;
   const featuredImageId = watch('featuredImageId');
   const images = watch('images');
-  const name = watch('name');
+  const binomialName = watch('binomialName');
   const theme = useTheme();
   const navigate = useNavigate();
-	const user = useSelector(({user}) => user);
+  const user = useSelector(({ user }) => user);
 
   function handleSaveSealife() {
-    dispatch(saveSealife(dirtyValues(dirtyFields, getValues())))
+    dispatch(saveSealife(
+      {
+        ...dirtyValues(dirtyFields, getValues()),
+        images
+      }
+    ))
   }
 
 
@@ -69,7 +74,7 @@ function SealifeHeader(props) {
                 src={_.find(images, { id: featuredImageId }).url}
                 alt={name}
               />
-            ) }
+            )}
           </motion.div>
           <motion.div
             className="flex flex-col items-center sm:items-start min-w-0 mx-8 sm:mx-16"
@@ -77,7 +82,7 @@ function SealifeHeader(props) {
             animate={{ x: 0, transition: { delay: 0.3 } }}
           >
             <Typography className="text-16 sm:text-20 truncate font-semibold">
-              {name || 'New Sealife'}
+              {binomialName || 'New Sealife'}
             </Typography>
             <Typography variant="caption" className="font-medium">
               Sealife Detail

@@ -32,16 +32,16 @@ function BasicInfoTab(props) {
 
   const defaultCenter = useMemo(() => {
     return {
-      lat: latitude,
-      lng: longitude
+      lat: latitude || 20,
+      lng: longitude || 70
     }
   }, [latitude, longitude])
 
  useEffect(()=>{
  if(marker)
-  marker.setPosition({ lat: latitude, lng: longitude })
+  marker.setPosition({ lat: latitude || 20, lng: longitude || 70 })
   if(startLocationMarker && startLatitude && startLongitude) 
-  startLocationMarker.setPosition({ lat: startLatitude, lng: startLongitude })
+  startLocationMarker.setPosition({ lat: startLatitude || 20, lng: startLongitude  || 70})
 
  }, [latitude, longitude, startLatitude, startLongitude])
 
@@ -52,7 +52,7 @@ function BasicInfoTab(props) {
 
     marker = new maps.Marker({
       title: name,
-      position: { lat: latitude, lng: longitude },
+      position: { lat: latitude || 20, lng: longitude || 70 },
       map,
       draggable: true,
       icon: "assets/images/markers/blue_MarkerD.png"
@@ -213,6 +213,9 @@ function BasicInfoTab(props) {
                   variant="outlined"
                   fullWidth
                   type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
               )}
             />
@@ -237,6 +240,9 @@ function BasicInfoTab(props) {
                   variant="outlined"
                   fullWidth
                   type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
               )}
             />
@@ -271,6 +277,9 @@ function BasicInfoTab(props) {
                   variant="outlined"
                   fullWidth
                   type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
               )}
             />
@@ -302,6 +311,9 @@ function BasicInfoTab(props) {
                   variant="outlined"
                   fullWidth
                   type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
               )}
             />

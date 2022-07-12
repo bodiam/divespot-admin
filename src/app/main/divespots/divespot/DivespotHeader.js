@@ -33,6 +33,7 @@ function DivespotHeader(props) {
       {
         ...dirtyValues(dirtyFields, getValues()),
         author: user.username,
+        images
       }
     ))
   }
