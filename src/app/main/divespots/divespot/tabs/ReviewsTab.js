@@ -33,48 +33,51 @@ function ReviewsTab(props) {
         <thead>
           <tr>
             <th>
-              <Typography className="font-semibold">ID</Typography>
-            </th>
-            <th>
               <Typography className="font-semibold">User</Typography>
-            </th>
-            <th>
-              <Typography className="font-semibold">Score</Typography>
             </th>
             <th>
               <Typography className="font-semibold">Content</Typography>
             </th>
-            <th>
+            <th className="w-64 text-right">
               <Typography className="font-semibold">Activity</Typography>
+            </th>
+            <th className="w-64 text-right">
+              <Typography className="font-semibold">Score</Typography>
+            </th>
+            <th className="w-64 text-right">
+              <Typography className="font-semibold">createDateTime</Typography>
             </th>
           </tr>
         </thead>
         <tbody>
-          {divespot?.reviews?.map((s) => (
-            <tr key={s.id}>
-              <td className="w-64">{s.id}</td>
-              <td>
+          {divespot?.reviews?.map((s, key) => (
+            <tr key={key}>
+              <td className="w-64 text-left">
                 <Typography
-                  component={Link}
-                  to={`/reviews/${s.id}`}
+                  //component={Link}
+                  //to={`/reviews/${s.id}`}
                   className="truncate"
-                  style={{
-                    color: 'inherit',
-                    textDecoration: 'underline',
-                  }}
+                  //style={{
+                    //color: 'inherit',
+                    //textDecoration: 'underline',
+                  //}}
                 >
-                  {s.userAccount.firstName}
+                  {s.userAccount.firstName + s.userAccount.lastName}
                 </Typography>
               </td>
-              <td className="w-64 text-right">
-                <span className="truncate">${s.score}</span>
-              </td>
-              <td className="w-64 text-right">
-                <span className="truncate">${s.content}</span>
+              <td className="w-128 text-left">
+                <span >{s.content}</span>
               </td>
               <td className="w-64 text-right">
                 <span className="truncate">{s.activity}</span>
               </td>
+              <td className="w-64 text-right">
+                <span className="truncate">{s.score}</span>
+              </td>
+              <td className="w-64 text-right">
+                <span className="truncate">{s.createDateTime ? new Date(s.createDateTime).toLocaleString() : 'N/A'}</span>
+              </td>
+
             </tr>
           ))}
         </tbody>
