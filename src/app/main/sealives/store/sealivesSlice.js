@@ -13,7 +13,7 @@ export const getSealives = createAsyncThunk('sealives/getSealives', async ({page
     return {data: searchData,  totalElements: searchTotalElements}; 
   }else{
     const response = await axios.get(`/admin/sealife?sort=binomialName&page=${page}&size=${rowsPerPage}`);
-    const data = await response.data.content;
+    const data = await response.data._embedded.sealife;
     const totalElements = await response.data.page.totalElements;
     return {data, totalElements};
   }
